@@ -5,7 +5,21 @@ $app = new \Silex\Application();
 $app['debug'] = true;
 
 $app->get(
-    '/{username}',
+    '/login',
+    function (\Silex\Application $app)
+    {
+        return 'Login page';
+    });
+
+$app->get(
+    '/register',
+    function (\Silex\Application $app)
+    {
+        return 'Registration page';
+    });
+
+$app->get(
+    '/{username}/',
     function (\Silex\Application $app, $username)
     {
         return 'List of repositories for user ' . $username;

@@ -14,7 +14,7 @@ class RepositoryRoutesTest extends WebTestCase
     public function test_repositories_list_route_exists()
     {
         $client = $this->createClient();
-        $client->request('GET', '/simon');
+        $client->request('GET', '/simon/');
 
         $this->assertTrue($client->getResponse()->isOk());
     }

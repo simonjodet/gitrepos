@@ -3,6 +3,17 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 $app = new \Silex\Application();
 $app['debug'] = true;
+$app->register(new \Silex\Provider\SecurityServiceProvider());
+$app['security.firewalls'] = array(
+    'user_firewall' => array(
+        'pattern' => '(?!register$|login$\b)\b\w+',
+        'http' => true,
+        'users' => array(
+            // raw password is foo
+            'admin' => array('ROLE_USER', '5FZ2Z8QIkA7UTZ4BYkoC+GsReLf569mSKDsfods6LYQ8t+a8EW9oaircfMpmaLbPBh4FOBiiFyLfuZmTSUwzZg=='),
+        ),
+    ),
+);
 
 $app->get(
     '/login',

@@ -1,7 +1,8 @@
 {
     "minimum-stability":"dev",
     "require":{
-        "silex/silex":"1.0.*"
+        "silex/silex":"1.0.*",
+        "symfony/security": "2.1.*"
     },
     "require-dev":{
         "symfony/browser-kit":"2.1.*"

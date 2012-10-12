@@ -8,6 +8,13 @@ class RepositoryRoutesTest extends WebTestCase
         $app = require __DIR__ . '/../../src/gitrepos.php';
         $app['debug'] = true;
         unset($app['exception_handler']);
+        $app['security.firewalls'] = array(
+            'anonymous_firewall' => array(
+                'pattern' => '^',
+                'anonymous' => array(),
+            )
+        );
+
         return $app;
     }
 

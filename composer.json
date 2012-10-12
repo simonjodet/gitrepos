@@ -2,9 +2,15 @@
     "minimum-stability":"dev",
     "require":{
         "silex/silex":"1.0.*",
-        "symfony/security": "2.1.*"
+        "symfony/security":"2.1.*"
     },
     "require-dev":{
+        "mockery/mockery":"0.7.*",
         "symfony/browser-kit":"2.1.*"
+    },
+    "autoload":{
+        "psr-0":{
+            "Gitrepos":"src/"
+        }
     }
 }

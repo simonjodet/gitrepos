@@ -6,7 +6,7 @@ $app['debug'] = true;
 $app->register(new \Silex\Provider\SecurityServiceProvider());
 $app['security.firewalls'] = array(
     'user_firewall' => array(
-        'pattern' => '(?!register$|login$\b)\b\w+',
+        'pattern' => new \Gitrepos\UserRequestMatcher($app['request']),
         'http' => true,
         'users' => array(
             // raw password is foo

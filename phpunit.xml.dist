@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<phpunit processIsolation="false" bootstrap="tests/bootstrap.php">
+
+    <testsuites>
+        <testsuite name="Web Test Cases">
+            <directory>./tests/web_test_cases/</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>

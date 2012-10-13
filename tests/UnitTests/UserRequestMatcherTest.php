@@ -22,6 +22,16 @@ class UserRequestMatcherTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($UserRequestMatcher->matches($RequestMock));
     }
 
+    public function test_matches_allows_signin_route()
+    {
+        $UserRequestMatcher = new \Gitrepos\UserRequestMatcher();
+        $RequestMock = \Mockery::mock('\Symfony\Component\HttpFoundation\Request');
+        $RequestMock
+            ->shouldReceive('getRequestUri')
+            ->andReturn('/signin');
+        $this->assertFalse($UserRequestMatcher->matches($RequestMock));
+    }
+
     public function test_matches_does_not_allow_other_routes()
     {
         $UserRequestMatcher = new \Gitrepos\UserRequestMatcher();

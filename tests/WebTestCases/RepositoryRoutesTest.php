@@ -16,14 +16,14 @@ class RepositoryRoutesTest extends WebTestCase
     public function test_repositories_list_route_exists()
     {
         $client = $this->authenticateUser();
-        $client->request('GET', '/simon/');
+        $client->request('GET', '/');
         $this->assertTrue($client->getResponse()->isOk());
     }
 
     public function test_repositories_create_form_route_exists()
     {
         $client = $this->authenticateUser();
-        $client->request('GET', '/simon/add');
+        $client->request('GET', '/add');
 
         $this->assertTrue($client->getResponse()->isOk());
     }
@@ -31,7 +31,7 @@ class RepositoryRoutesTest extends WebTestCase
     public function test_repositories_create_route_exists()
     {
         $client = $this->authenticateUser();
-        $client->request('POST', '/simon/create');
+        $client->request('POST', '/create');
 
         $this->assertTrue($client->getResponse()->isOk());
     }

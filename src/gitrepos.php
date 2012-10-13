@@ -2,7 +2,7 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use \Symfony\Component\HttpFoundation\Request,
-    \Silex\Provider\FormServiceProvider;
+\Silex\Provider\FormServiceProvider;
 
 $app = new \Silex\Application();
 $app['debug'] = true;
@@ -41,7 +41,7 @@ $app->get(
     '/',
     function (\Silex\Application $app)
     {
-        return 'Home';
+        return 'List of repositories for user ' . $app['security']->getToken()->getUsername();
     });
 
 $app->get(
@@ -52,24 +52,17 @@ $app->get(
     });
 
 $app->get(
-    '/{username}/',
-    function (\Silex\Application $app, $username)
+    '/add',
+    function (\Silex\Application $app)
     {
-        return 'List of repositories for user ' . $username;
-    });
-
-$app->get(
-    '/{username}/add',
-    function (\Silex\Application $app, $username)
-    {
-        return 'Create repository form for user ' . $username;
+        return 'Create repository form for user ' . $app['security']->getToken()->getUsername();
     });
 
 $app->post(
-    '/{username}/create',
-    function (\Silex\Application $app, $username)
+    '/create',
+    function (\Silex\Application $app)
     {
-        return 'Create repository for user ' . $username;
+        return 'Create repository for user ' . $app['security']->getToken()->getUsername();
     });
 
 $app->get(

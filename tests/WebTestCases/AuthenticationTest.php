@@ -15,7 +15,7 @@ class AuthenticationTest extends WebTestCase
     public function test_user_domain_is_not_accessible_by_non_users()
     {
         $client = $this->createClient();
-        $client->request('GET', '/username/');
+        $client->request('GET', '/');
 
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
     }

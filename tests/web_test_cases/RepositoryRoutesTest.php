@@ -1,5 +1,6 @@
 <?php
-use \Silex\WebTestCase;
+use \Silex\WebTestCase,
+\Symfony\Component\Security\Core\User\User;
 
 class RepositoryRoutesTest extends WebTestCase
 {
@@ -7,28 +8,35 @@ class RepositoryRoutesTest extends WebTestCase
     {
         $app = require __DIR__ . '/../../src/gitrepos.php';
         $app['debug'] = true;
-        unset($app['exception_handler']);
-        $app['security.firewalls'] = array(
-            'anonymous_firewall' => array(
-                'pattern' => '^',
-                'anonymous' => array(),
-            )
-        );
+        $app['session.test'] = true;
 
+        unset($app['exception_handler']);
         return $app;
+    }
+
+    private function authenticateUser()
+    {
+        $client = $this->createClient();
+        $crawler = $client->request('GET', '/login');
+        $form = $crawler->selectButton('submit')->form();
+
+        $form['_username'] = 'admin';
+        $form['_password'] = 'foo';
+
+        $client->submit($form);
+        return $client;
     }
 
     public function test_repositories_list_route_exists()
     {
-        $client = $this->createClient();
+        $client = $this->authenticateUser();
         $client->request('GET', '/simon/');
-
         $this->assertTrue($client->getResponse()->isOk());
     }
 
     public function test_repositories_create_form_route_exists()
     {
-        $client = $this->createClient();
+        $client = $this->authenticateUser();
         $client->request('GET', '/simon/add');
 
         $this->assertTrue($client->getResponse()->isOk());
@@ -36,7 +44,7 @@ class RepositoryRoutesTest extends WebTestCase
 
     public function test_repositories_create_route_exists()
     {
-        $client = $this->createClient();
+        $client = $this->authenticateUser();
         $client->request('POST', '/simon/create');
 
         $this->assertTrue($client->getResponse()->isOk());
@@ -44,7 +52,7 @@ class RepositoryRoutesTest extends WebTestCase
 
     public function test_repository_details_route_exists()
     {
-        $client = $this->createClient();
+        $client = $this->authenticateUser();
         $client->request('GET', '/simon/reponame/');
 
         $this->assertTrue($client->getResponse()->isOk());
@@ -52,12 +60,12 @@ class RepositoryRoutesTest extends WebTestCase
 
     public function test_naming_a_repository_with_repositories_actions_works()
     {
-        $client = $this->createClient();
+        $client = $this->authenticateUser();
         $client->request('GET', '/simon/add/');
 
         $this->assertTrue($client->getResponse()->isOk());
 
-        $client = $this->createClient();
+        $client = $this->authenticateUser();
         $client->request('GET', '/simon/create/');
 
         $this->assertTrue($client->getResponse()->isOk());
@@ -65,7 +73,7 @@ class RepositoryRoutesTest extends WebTestCase
 
     public function test_repository_edit_form_route_exists()
     {
-        $client = $this->createClient();
+        $client = $this->authenticateUser();
         $client->request('GET', '/simon/reponame/edit');
 
         $this->assertTrue($client->getResponse()->isOk());
@@ -73,7 +81,7 @@ class RepositoryRoutesTest extends WebTestCase
 
     public function test_repository_update_route_exists()
     {
-        $client = $this->createClient();
+        $client = $this->authenticateUser();
         $client->request('POST', '/simon/reponame/update');
 
         $this->assertTrue($client->getResponse()->isOk());
@@ -81,7 +89,7 @@ class RepositoryRoutesTest extends WebTestCase
 
     public function test_repository_deletion_route_exists()
     {
-        $client = $this->createClient();
+        $client = $this->authenticateUser();
         $client->request('POST', '/simon/reponame/delete');
 
         $this->assertTrue($client->getResponse()->isOk());

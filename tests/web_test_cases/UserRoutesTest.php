@@ -7,7 +7,10 @@ class UserRoutesTest extends WebTestCase
     {
         $app = require __DIR__ . '/../../src/gitrepos.php';
         $app['debug'] = true;
+        $app['session.test'] = true;
+
         unset($app['exception_handler']);
+
         return $app;
     }
 

@@ -1,13 +1,25 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
 
+use \Symfony\Component\HttpFoundation\Request,
+    \Silex\Provider\FormServiceProvider;
+
 $app = new \Silex\Application();
 $app['debug'] = true;
+
+$app->register(new Silex\Provider\SessionServiceProvider());
+
+$app->register(new Silex\Provider\UrlGeneratorServiceProvider());
+
+$app->register(new Silex\Provider\TwigServiceProvider(), array(
+    'twig.path' => __DIR__ . '/views',
+));
+
 $app->register(new \Silex\Provider\SecurityServiceProvider());
 $app['security.firewalls'] = array(
     'user_firewall' => array(
         'pattern' => new \Gitrepos\UserRequestMatcher($app['request']),
-        'http' => true,
+        'form' => array('login_path' => '/login', 'check_path' => '/authenticate'),
         'users' => array(
             // raw password is foo
             'admin' => array('ROLE_USER', '5FZ2Z8QIkA7UTZ4BYkoC+GsReLf569mSKDsfods6LYQ8t+a8EW9oaircfMpmaLbPBh4FOBiiFyLfuZmTSUwzZg=='),
@@ -17,9 +29,19 @@ $app['security.firewalls'] = array(
 
 $app->get(
     '/login',
+    function(Request $request) use ($app)
+    {
+        return $app['twig']->render('login.twig', array(
+            'error' => $app['security.last_error']($request),
+            'last_username' => $app['session']->get('_security.last_username'),
+        ));
+    });
+
+$app->get(
+    '/',
     function (\Silex\Application $app)
     {
-        return 'Login page';
+        return 'Home';
     });
 
 $app->get(

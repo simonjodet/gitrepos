@@ -1,5 +1,5 @@
 <?php
-
+namespace Tests\UnitTests;
 class UserRequestMatcherTest extends \PHPUnit_Framework_TestCase
 {
     public function test_matches_allows_login_route()
@@ -28,7 +28,7 @@ class UserRequestMatcherTest extends \PHPUnit_Framework_TestCase
         $RequestMock = \Mockery::mock('\Symfony\Component\HttpFoundation\Request');
         $RequestMock
             ->shouldReceive('getRequestUri')
-            ->andReturn('/other/route','/username/other/route');
+            ->andReturn('/other/route', '/username/other/route');
         $this->assertTrue($UserRequestMatcher->matches($RequestMock));
         $this->assertTrue($UserRequestMatcher->matches($RequestMock));
     }

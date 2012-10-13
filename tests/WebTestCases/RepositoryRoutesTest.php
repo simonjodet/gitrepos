@@ -1,6 +1,5 @@
 <?php
-use \Silex\WebTestCase,
-\Symfony\Component\Security\Core\User\User;
+namespace Tests\WebTestCases;
 
 class RepositoryRoutesTest extends WebTestCase
 {
@@ -12,19 +11,6 @@ class RepositoryRoutesTest extends WebTestCase
 
         unset($app['exception_handler']);
         return $app;
-    }
-
-    private function authenticateUser()
-    {
-        $client = $this->createClient();
-        $crawler = $client->request('GET', '/login');
-        $form = $crawler->selectButton('submit')->form();
-
-        $form['_username'] = 'admin';
-        $form['_password'] = 'foo';
-
-        $client->submit($form);
-        return $client;
     }
 
     public function test_repositories_list_route_exists()

@@ -1,5 +1,5 @@
 <?php
-use \Silex\WebTestCase;
+namespace Tests\WebTestCases;
 
 class AuthenticationTest extends WebTestCase
 {
@@ -9,15 +9,6 @@ class AuthenticationTest extends WebTestCase
         $app['debug'] = true;
         $app['session.test'] = true;
         unset($app['exception_handler']);
-        $firewalls = $app['security.firewalls'];
-        $firewalls['user_firewall']['users'] = array(
-            // raw password is foo
-            'user' => array(
-                'ROLE_USER',
-                '5FZ2Z8QIkA7UTZ4BYkoC+GsReLf569mSKDsfods6LYQ8t+a8EW9oaircfMpmaLbPBh4FOBiiFyLfuZmTSUwzZg=='),
-        );
-        $app['security.firewalls'] = $firewalls;
-
         return $app;
     }
 

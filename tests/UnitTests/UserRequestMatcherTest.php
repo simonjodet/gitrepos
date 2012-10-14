@@ -12,16 +12,6 @@ class UserRequestMatcherTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($UserRequestMatcher->matches($RequestMock));
     }
 
-    public function test_matches_allows_register_route()
-    {
-        $UserRequestMatcher = new \Gitrepos\UserRequestMatcher();
-        $RequestMock = \Mockery::mock('\Symfony\Component\HttpFoundation\Request');
-        $RequestMock
-            ->shouldReceive('getRequestUri')
-            ->andReturn('/register');
-        $this->assertFalse($UserRequestMatcher->matches($RequestMock));
-    }
-
     public function test_matches_allows_signin_route()
     {
         $UserRequestMatcher = new \Gitrepos\UserRequestMatcher();

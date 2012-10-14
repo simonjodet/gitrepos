@@ -20,7 +20,7 @@ class RepositoryRoutesTest extends WebTestCase
         $this->assertTrue($client->getResponse()->isOk());
     }
 
-    public function test_repositories_create_form_route_exists()
+    public function test_repositories_get_add_route_exists()
     {
         $client = $this->authenticateUser();
         $client->request('GET', '/add');
@@ -28,10 +28,10 @@ class RepositoryRoutesTest extends WebTestCase
         $this->assertTrue($client->getResponse()->isOk());
     }
 
-    public function test_repositories_create_route_exists()
+    public function test_repositories_post_add_route_exists()
     {
         $client = $this->authenticateUser();
-        $client->request('POST', '/create');
+        $client->request('POST', '/add');
 
         $this->assertTrue($client->getResponse()->isOk());
     }
@@ -50,14 +50,9 @@ class RepositoryRoutesTest extends WebTestCase
         $client->request('GET', '/simon/add/');
 
         $this->assertTrue($client->getResponse()->isOk());
-
-        $client = $this->authenticateUser();
-        $client->request('GET', '/simon/create/');
-
-        $this->assertTrue($client->getResponse()->isOk());
     }
 
-    public function test_repository_edit_form_route_exists()
+    public function test_repository_get_edit_route_exists()
     {
         $client = $this->authenticateUser();
         $client->request('GET', '/simon/reponame/edit');
@@ -65,10 +60,10 @@ class RepositoryRoutesTest extends WebTestCase
         $this->assertTrue($client->getResponse()->isOk());
     }
 
-    public function test_repository_update_route_exists()
+    public function test_repository_post_edit_route_exists()
     {
         $client = $this->authenticateUser();
-        $client->request('POST', '/simon/reponame/update');
+        $client->request('POST', '/simon/reponame/edit');
 
         $this->assertTrue($client->getResponse()->isOk());
     }

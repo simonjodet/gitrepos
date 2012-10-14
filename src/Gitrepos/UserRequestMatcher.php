@@ -17,7 +17,6 @@ class UserRequestMatcher implements \Symfony\Component\HttpFoundation\RequestMat
     {
         $anonymous_routes = array(
             '/login',
-            '/register',
             '/signin'
         );
         return !in_array($request->getRequestUri(), $anonymous_routes);

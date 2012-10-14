@@ -22,10 +22,17 @@ class UserRoutesTest extends WebTestCase
         $this->assertTrue($client->getResponse()->isOk());
     }
 
-    public function test_register_route_exists()
+    public function test_get_register_route_exists()
     {
         $client = $this->createClient();
-        $client->request('GET', '/register');
+        $client->request('GET', '/signin');
+
+        $this->assertTrue($client->getResponse()->isOk());
+    }
+    public function test_post_register_route_exists()
+    {
+        $client = $this->createClient();
+        $client->request('POST', '/signin');
 
         $this->assertTrue($client->getResponse()->isOk());
     }

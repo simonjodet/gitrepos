@@ -28,6 +28,13 @@ $app['security.firewalls'] = array(
 );
 
 $app->get(
+    '/',
+    function (\Silex\Application $app)
+    {
+        return 'List of repositories for user ' . $app['security']->getToken()->getUsername();
+    });
+
+$app->get(
     '/login',
     function(Request $request) use ($app)
     {
@@ -38,17 +45,17 @@ $app->get(
     });
 
 $app->get(
-    '/',
-    function (\Silex\Application $app)
-    {
-        return 'List of repositories for user ' . $app['security']->getToken()->getUsername();
-    });
-
-$app->get(
-    '/register',
+    '/signin',
     function (\Silex\Application $app)
     {
         return 'Registration page';
+    });
+
+$app->post(
+    '/signin',
+    function (\Silex\Application $app)
+    {
+        return 'Registration';
     });
 
 $app->get(
@@ -59,7 +66,7 @@ $app->get(
     });
 
 $app->post(
-    '/create',
+    '/add',
     function (\Silex\Application $app)
     {
         return 'Create repository for user ' . $app['security']->getToken()->getUsername();
@@ -80,7 +87,7 @@ $app->get(
     });
 
 $app->post(
-    '/{username}/{reponame}/update',
+    '/{username}/{reponame}/edit',
     function (\Silex\Application $app, $username, $reponame)
     {
         return 'Repository edition for  ' . $username . '/' . $reponame;

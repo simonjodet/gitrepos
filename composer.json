@@ -1,10 +1,14 @@
 {
-    "minimum-stability":"dev",
     "require":{
         "silex/silex":"1.0.*",
         "symfony/security":"2.1.*",
         "symfony/twig-bridge":"2.1.*",
-        "twig/twig":">=1.8,<2.0-dev"
+        "twig/twig":">=1.8,<2.0-dev",
+        "symfony/form": "2.1.*",
+        "symfony/validator": "2.1.*",
+        "symfony/config": "2.1.*",
+        "symfony/translation": "2.1.*",
+        "symfony/locale": "2.1.*"
     },
     "require-dev":{
         "mockery/mockery":"0.7.*",

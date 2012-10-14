@@ -15,6 +15,14 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => __DIR__ . '/views',
 ));
 
+$app->register(new FormServiceProvider(), array(
+    'form.secret' => 'lk<qsfdq<s4d2q4sddf5y4(§4uè43(5§4(§35(4'
+));
+
+$app->register(new Silex\Provider\TranslationServiceProvider(), array(
+    'locale_fallback' => 'en',
+));
+
 $app->register(new \Silex\Provider\SecurityServiceProvider());
 $app['security.firewalls'] = array(
     'user_firewall' => array(
@@ -44,33 +52,45 @@ $app->get(
         ));
     });
 
-$app->get(
+$app->match(
     '/signin',
     function (\Silex\Application $app)
     {
-        return 'Registration page';
-    });
+        $form = $app['form.factory']->createBuilder('form')
+            ->add('username')
+            ->add('email')
+            ->add('password', 'password')
+            ->add('password2', 'password', array('label' => 'Retype password'))
+            ->getForm();
 
-$app->post(
-    '/signin',
-    function (\Silex\Application $app)
-    {
-        return 'Registration';
-    });
+        if ($app['request']->getMethod() == 'POST')
+        {
+            $form->bind($app['request']);
 
-$app->get(
+            if ($form->isValid())
+            {
+                $data = $form->getData();
+
+                return print_r($data, true);
+            }
+        }
+
+        return $app['twig']->render('signin.twig', array('form' => $form->createView()));
+    }
+)->method('GET|POST');
+
+$app->match(
     '/add',
     function (\Silex\Application $app)
     {
+        if ($app['request']->getMethod() == 'POST')
+        {
+            return 'Create repository for user ' . $app['security']->getToken()->getUsername();
+        }
         return 'Create repository form for user ' . $app['security']->getToken()->getUsername();
-    });
+    }
+)->method('GET|POST');
 
-$app->post(
-    '/add',
-    function (\Silex\Application $app)
-    {
-        return 'Create repository for user ' . $app['security']->getToken()->getUsername();
-    });
 
 $app->get(
     '/{username}/{reponame}/',
@@ -79,19 +99,17 @@ $app->get(
         return 'Details for  ' . $username . '/' . $reponame;
     });
 
-$app->get(
+$app->match(
     '/{username}/{reponame}/edit',
     function (\Silex\Application $app, $username, $reponame)
     {
+        if ($app['request']->getMethod() == 'POST')
+        {
+            return 'Repository edition for  ' . $username . '/' . $reponame;
+        }
         return 'Repository edition form for  ' . $username . '/' . $reponame;
-    });
-
-$app->post(
-    '/{username}/{reponame}/edit',
-    function (\Silex\Application $app, $username, $reponame)
-    {
-        return 'Repository edition for  ' . $username . '/' . $reponame;
-    });
+    }
+)->method('GET|POST');
 
 $app->post(
     '/{username}/{reponame}/delete',

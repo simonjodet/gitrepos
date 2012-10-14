@@ -1,7 +1,10 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use \Symfony\Component\HttpFoundation\Request,
+use
+\Symfony\Component\HttpFoundation\Request,
+\Symfony\Component\Form\FormError,
+\Symfony\Component\Validator\Constraints as Assert,
 \Silex\Provider\FormServiceProvider;
 
 $app = new \Silex\Application();
@@ -22,6 +25,8 @@ $app->register(new FormServiceProvider(), array(
 $app->register(new Silex\Provider\TranslationServiceProvider(), array(
     'locale_fallback' => 'en',
 ));
+
+$app->register(new Silex\Provider\ValidatorServiceProvider());
 
 $app->register(new \Silex\Provider\SecurityServiceProvider());
 $app['security.firewalls'] = array(
@@ -57,20 +62,47 @@ $app->match(
     function (\Silex\Application $app)
     {
         $form = $app['form.factory']->createBuilder('form')
-            ->add('username')
-            ->add('email')
-            ->add('password', 'password')
-            ->add('password2', 'password', array('label' => 'Retype password'))
+            ->add(
+            'username',
+            'text',
+            array(
+                'constraints' => array(
+                    new Assert\MinLength(3),
+                    new Assert\MaxLength(64)
+                )
+            ))
+            ->add(
+            'email',
+            'text',
+            array(
+                'constraints' => array(
+                    new Assert\Email()
+                )
+            ))
+            ->add(
+            'password',
+            'password',
+            array(
+                'always_empty' => false,
+                'constraints' => array(
+                    new Assert\MinLength(6),
+                    new Assert\MaxLength(128)
+                )
+            ))
+            ->add('password2', 'password', array('label' => 'Retype password', 'always_empty' => false))
             ->getForm();
 
         if ($app['request']->getMethod() == 'POST')
         {
             $form->bind($app['request']);
+            $data = $form->getData();
+            if ($data['password2'] != $data['password'])
+            {
+                $form->get('password2')->addError(new FormError('The two password fields don\'t match.'));
+            }
 
             if ($form->isValid())
             {
-                $data = $form->getData();
-
                 return print_r($data, true);
             }
         }

@@ -8,33 +8,55 @@ namespace Gitrepos;
 /**
  * User
  */
-class User
+class User implements \Symfony\Component\Security\Core\User\AdvancedUserInterface
 {
     /**
-     * @var int User's database ID
-     */
-    private $id;
-
-    /**
-     * @var string User's username
+     * @var string
      */
     private $username;
 
     /**
-     * @var string User's email
-     */
-    private $email;
-
-    /**
-     * @var string User's password
+     * @var string
      */
     private $password;
 
 
     /**
-     * Constructor
-     * @param array $data User data for quick initialization - Optional
+     * @var string
      */
+    private $email;
+
+    /**
+     * @var string
+     */
+    private $id;
+
+    /**
+     * @var bool
+     */
+    private $enabled = true;
+
+    /**
+     * @var bool
+     */
+    private $accountNonExpired = true;
+
+    /**
+     * @var bool
+     */
+    private $credentialsNonExpired = true;
+
+    /**
+     * @var bool
+     */
+    private $accountNonLocked = true;
+
+    /**
+     * @var array
+     */
+    private $roles = array();
+
+
     public function __construct($data = array())
     {
         if (is_array($data))
@@ -50,8 +72,79 @@ class User
         }
     }
 
+
     /**
-     * Email setter
+     * {@inheritdoc}
+     */
+    public function getRoles()
+    {
+        return $this->roles;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSalt()
+    {
+        return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isAccountNonExpired()
+    {
+        return $this->accountNonExpired;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isAccountNonLocked()
+    {
+        return $this->accountNonLocked;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isCredentialsNonExpired()
+    {
+        return $this->credentialsNonExpired;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isEnabled()
+    {
+        return $this->enabled;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function eraseCredentials()
+    {
+    }
+
+    /**
      * @param string $email
      */
     public function setEmail($email)
@@ -60,7 +153,6 @@ class User
     }
 
     /**
-     * Email getter
      * @return string
      */
     public function getEmail()
@@ -69,8 +161,7 @@ class User
     }
 
     /**
-     * ID setter
-     * @param int $id
+     * @param string $id
      */
     public function setId($id)
     {
@@ -78,8 +169,7 @@ class User
     }
 
     /**
-     * ID getter
-     * @return int
+     * @return string
      */
     public function getId()
     {
@@ -87,7 +177,6 @@ class User
     }
 
     /**
-     * Password setter
      * @param string $password
      */
     public function setPassword($password)
@@ -96,16 +185,6 @@ class User
     }
 
     /**
-     * Password getter
-     * @return string
-     */
-    public function getPassword()
-    {
-        return $this->password;
-    }
-
-    /**
-     * Username setter
      * @param string $username
      */
     public function setUsername($username)
@@ -113,12 +192,4 @@ class User
         $this->username = $username;
     }
 
-    /**
-     * Username getter
-     * @return string
-     */
-    public function getUsername()
-    {
-        return $this->username;
-    }
 }

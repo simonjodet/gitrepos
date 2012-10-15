@@ -2,12 +2,12 @@
 namespace Tests\UnitTests;
 class UserTest extends \PHPUnit_Framework_TestCase
 {
-    public function test_constructor_accepts_array_of_data()
+    public function test_constructor_accepts_data()
     {
         $UserData = array(
             'id' => 42,
             'username' => 'simon',
-            'email' => 'simon@jodet.com',
+            'email' => 'email@domain.com',
             'password' => 'pa$$word'
         );
 
@@ -15,7 +15,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(42, $User->getId());
         $this->assertEquals('simon', $User->getUsername());
-        $this->assertEquals('simon@jodet.com', $User->getEmail());
+        $this->assertEquals('email@domain.com', $User->getEmail());
         $this->assertEquals('pa$$word', $User->getPassword());
     }
 
@@ -24,14 +24,14 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $UserData = array(
             'id' => 42,
             'not_a_property' => 'foo',
-            'email' => 'simon@jodet.com',
+            'email' => 'email@domain.com',
             'password' => 'pa$$word'
         );
 
         $User = new \Gitrepos\User($UserData);
 
         $this->assertEquals(42, $User->getId());
-        $this->assertEquals('simon@jodet.com', $User->getEmail());
+        $this->assertEquals('email@domain.com', $User->getEmail());
         $this->assertEquals('pa$$word', $User->getPassword());
     }
 

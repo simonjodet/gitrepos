@@ -8,10 +8,12 @@
         "symfony/validator":"2.1.*",
         "symfony/config":"2.1.*",
         "symfony/translation":"2.1.*",
-        "symfony/locale":"2.1.*"
+        "symfony/locale":"2.1.*",
+        "doctrine/dbal":"2.1.*"
     },
     "require-dev":{
-        "mockery/mockery":"0.7.*",
+        "phpunit/phpunit":"3.7.*",
+        "mockery/mockery":"dev-master",
         "symfony/browser-kit":"2.1.*",
         "symfony/process":"2.1.*",
         "symfony/css-selector":"2.1.*"

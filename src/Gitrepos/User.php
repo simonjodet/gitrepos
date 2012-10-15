@@ -57,6 +57,9 @@ class User implements \Symfony\Component\Security\Core\User\AdvancedUserInterfac
     private $roles = array();
 
 
+    /**
+     * @param array $data
+     */
     public function __construct($data = array())
     {
         if (is_array($data))

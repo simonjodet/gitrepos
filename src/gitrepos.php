@@ -40,6 +40,13 @@ $app['security.firewalls'] = array(
     ),
 );
 
+$app->register(new Silex\Provider\DoctrineServiceProvider(), array(
+    'db.options' => array(
+        'driver' => 'pdo_sqlite',
+        'path' => sys_get_temp_dir() . '/gitrepos.db',
+    ),
+));
+
 $app->get(
     '/',
     function (\Silex\Application $app)
@@ -62,8 +69,7 @@ $app->match(
     function (\Silex\Application $app)
     {
         $form = $app['form.factory']->createBuilder('form')
-            ->add(
-            'username',
+            ->add('username',
             'text',
             array(
                 'constraints' => array(
@@ -71,16 +77,14 @@ $app->match(
                     new Assert\MaxLength(64)
                 )
             ))
-            ->add(
-            'email',
+            ->add('email',
             'text',
             array(
                 'constraints' => array(
                     new Assert\Email()
                 )
             ))
-            ->add(
-            'password',
+            ->add('password',
             'password',
             array(
                 'always_empty' => false,
@@ -89,7 +93,12 @@ $app->match(
                     new Assert\MaxLength(128)
                 )
             ))
-            ->add('password2', 'password', array('label' => 'Retype password', 'always_empty' => false))
+            ->add('password2',
+            'password',
+            array(
+                'label' => 'Retype password',
+                'always_empty' => false
+            ))
             ->getForm();
 
         if ($app['request']->getMethod() == 'POST')

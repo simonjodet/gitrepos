@@ -1,12 +1,9 @@
 <?xml version="1.0"?>
-<phpunit processIsolation="false" bootstrap="tests/bootstrap.php">
+<phpunit processIsolation="false" bootstrap="bootstrap.php">
 
     <testsuites>
         <testsuite name="UnitTests">
-            <directory>./tests/UnitTests</directory>
-        </testsuite>
-        <testsuite name="WebTestCases">
-            <directory>./tests/WebTestCases</directory>
+            <directory>./UnitTests</directory>
         </testsuite>
     </testsuites>
     <listeners>

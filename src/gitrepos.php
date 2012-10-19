@@ -33,10 +33,10 @@ $app['security.firewalls'] = array(
     'user_firewall' => array(
         'pattern' => new \Gitrepos\UserRequestMatcher($app['request']),
         'form' => array('login_path' => '/login', 'check_path' => '/authenticate'),
-        'users' => array(
-            // raw password is foo
-            'admin' => array('ROLE_USER', '5FZ2Z8QIkA7UTZ4BYkoC+GsReLf569mSKDsfods6LYQ8t+a8EW9oaircfMpmaLbPBh4FOBiiFyLfuZmTSUwzZg=='),
-        ),
+        'users' => $app->share(function () use ($app)
+        {
+            return new \Gitrepos\UserProvider($app);
+        }),
     ),
 );
 
@@ -112,6 +112,8 @@ $app->match(
 
             if ($form->isValid())
             {
+                $UserModel = new \Gitrepos\UserModel($app);
+                $UserModel->create(new \Gitrepos\User($data));
                 return print_r($data, true);
             }
         }

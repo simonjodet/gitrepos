@@ -3,6 +3,10 @@ namespace Tests\WebTestCases;
 
 class SigninTest extends WebTestCase
 {
+
+    /**
+     * @var \Symfony\Component\HttpKernel\Client
+     */
     private $client;
     private $crawler;
     private $buttonCrawlerNode;
@@ -118,5 +122,28 @@ class SigninTest extends WebTestCase
         ));
         $this->client->submit($form);
         $this->assertEquals('The two password fields don\'t match.', $this->getErrorMessage());
+    }
+
+
+    public function test_successful_signin_allow_login()
+    {
+        $form = $this->buttonCrawlerNode->form(array(
+            'form[username]' => 'username',
+            'form[email]' => 'mail@domain.com',
+            'form[password]' => 'pa$$word',
+            'form[password2]' => 'pa$$word',
+        ));
+        $this->client->submit($form);
+
+        $client = $this->createClient();
+        $crawler = $client->request('GET', '/login');
+        $buttonCrawlerNode = $crawler->selectButton('submit');
+        $form = $buttonCrawlerNode->form(array(
+            '_username' => 'username',
+            '_password' => 'pa$$word',
+        ));
+        $client->submit($form);
+
+        $this->assertEquals('http://localhost/', $client->getResponse()->getTargetUrl());
     }
 }

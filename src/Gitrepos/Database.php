@@ -29,7 +29,7 @@ class Database
                 $usersTable = $Schema->createTable('users');
                 $usersTable->addColumn('username', 'string', array('length' => 64));
                 $usersTable->addColumn('email', 'string', array('length' => 255));
-                $usersTable->addColumn('pwd', 'string', array('length' => 255));
+                $usersTable->addColumn('password', 'string', array('length' => 255));
                 $usersTable->addUniqueIndex(array('username'), 'unique_users_nickname');
                 $usersTable->addUniqueIndex(array('email'), 'unique_users_email');
                 $usersTable->setPrimaryKey(array('username'));

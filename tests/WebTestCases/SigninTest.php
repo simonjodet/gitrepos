@@ -23,6 +23,9 @@ class SigninTest extends WebTestCase
         $this->crawler = $client->request('GET', '/signin');
         $this->client = $client;
         $this->buttonCrawlerNode = $this->crawler->selectButton('submit');
+
+        $Database = new \Gitrepos\Database($this->app);
+        $Database->reset();
     }
 
     public function test_the_signin_form_contains_the_needed_fields()

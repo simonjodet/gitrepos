@@ -5,6 +5,7 @@ use
 \Symfony\Component\HttpFoundation\Request,
 \Symfony\Component\Form\FormError,
 \Symfony\Component\Validator\Constraints as Assert,
+\Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken,
 \Silex\Provider\FormServiceProvider;
 
 $app = new \Silex\Application();
@@ -116,8 +117,9 @@ $app->match(
                 $UserModel = new \Gitrepos\UserModel($app);
                 try
                 {
-                    $UserModel->create(new \Gitrepos\User($data));
-                    return print_r($data, true);
+                    $User = $UserModel->create(new \Gitrepos\User($data));
+                    $app['security']->setToken(new UsernamePasswordToken($User, $User->getPassword(), 'user_firewall', array('ROLE_USER')));
+                    return $app->redirect('/');
                 }
                 catch (\Gitrepos\Exceptions\DuplicateUsername $e)
                 {

@@ -125,7 +125,7 @@ class SigninTest extends WebTestCase
     }
 
 
-    public function test_successful_signin_allow_login()
+    public function test_successful_signin_redirects_to_root_route()
     {
         $form = $this->buttonCrawlerNode->form(array(
             'form[username]' => 'username',
@@ -135,21 +135,11 @@ class SigninTest extends WebTestCase
         ));
         $this->client->submit($form);
 
-        $client = $this->createClient();
-        $crawler = $client->request('GET', '/login');
-        $buttonCrawlerNode = $crawler->selectButton('submit');
-        $form = $buttonCrawlerNode->form(array(
-            '_username' => 'username',
-            '_password' => 'pa$$word',
-        ));
-        $client->submit($form);
-
-        $this->assertEquals('http://localhost/', $client->getResponse()->getTargetUrl());
+        $this->assertEquals('/', $this->client->getResponse()->getTargetUrl());
     }
 
     public function test_the_signin_form_display_duplicate_email_error()
     {
-        //Minimum is 3 characters
         $form = $this->buttonCrawlerNode->form(array(
             'form[username]' => 'aaa',
             'form[email]' => 'mail@domain.com',
@@ -166,13 +156,11 @@ class SigninTest extends WebTestCase
             'form[password2]' => 'pa$$word',
         ));
         $this->client->submit($form);
-        echo $this->getErrorMessage();
         $this->assertEquals('This email address is already used.', $this->getErrorMessage());
     }
 
     public function test_the_signin_form_display_duplicate_username_error()
     {
-        //Minimum is 3 characters
         $form = $this->buttonCrawlerNode->form(array(
             'form[username]' => 'aaa',
             'form[email]' => 'mail@domain.com',
@@ -189,7 +177,6 @@ class SigninTest extends WebTestCase
             'form[password2]' => 'pa$$word',
         ));
         $this->client->submit($form);
-        echo $this->getErrorMessage();
         $this->assertEquals('This username is already used.', $this->getErrorMessage());
     }
 }

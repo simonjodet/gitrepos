@@ -11,20 +11,26 @@ use
 $app = new \Silex\Application();
 $app['debug'] = true;
 
+$app['conf.twig.path'] = __DIR__ . '/views';
+$app['conf.form.secret'] = 'lk<qsfdq<s4d2q4sddf5y4(§4uè43(5§4(§35(4';
+$app['conf.locale_fallback'] = 'en';
+$app['conf.db.driver'] = 'pdo_sqlite';
+$app['conf.db.path'] = sys_get_temp_dir() . '/gitrepos.db';
+
 $app->register(new Silex\Provider\SessionServiceProvider());
 
 $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
-    'twig.path' => __DIR__ . '/views',
+    'twig.path' => $app['conf.twig.path']
 ));
 
 $app->register(new FormServiceProvider(), array(
-    'form.secret' => 'lk<qsfdq<s4d2q4sddf5y4(§4uè43(5§4(§35(4'
+    'form.secret' => $app['conf.form.secret']
 ));
 
 $app->register(new Silex\Provider\TranslationServiceProvider(), array(
-    'locale_fallback' => 'en',
+    'locale_fallback' => $app['conf.locale_fallback']
 ));
 
 $app->register(new Silex\Provider\ValidatorServiceProvider());
@@ -44,9 +50,9 @@ $app['security.firewalls'] = array(
 
 $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
     'db.options' => array(
-        'driver' => 'pdo_sqlite',
-        'path' => sys_get_temp_dir() . '/gitrepos.db',
-    ),
+        'driver' => $app['conf.db.driver'],
+        'path' => $app['conf.db.path']
+    )
 ));
 
 $app->get(

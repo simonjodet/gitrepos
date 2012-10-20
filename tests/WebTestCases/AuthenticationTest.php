@@ -75,4 +75,19 @@ class AuthenticationTest extends WebTestCase
         $client->submit($form);
         $this->assertEquals('Bad credentials', trim($client->getCrawler()->filter('form')->first()->text()));
     }
+
+    public function test_logout_works_as_expected(){
+        $this->createUser();
+        $client = $this->createClient();
+        $crawler = $client->request('GET', '/login');
+        $buttonCrawlerNode = $crawler->selectButton('submit');
+        $form = $buttonCrawlerNode->form(array(
+            '_username' => 'username',
+            '_password' => 'pa$$word',
+        ));
+        $client->submit($form);
+        $client->request('GET', '/logout');
+        $client->followRedirect();
+        $this->assertEquals('http://localhost/login', $client->getResponse()->getTargetUrl());
+    }
 }

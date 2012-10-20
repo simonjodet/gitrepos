@@ -33,6 +33,7 @@ $app['security.firewalls'] = array(
     'user_firewall' => array(
         'pattern' => new \Gitrepos\UserRequestMatcher($app['request']),
         'form' => array('login_path' => '/login', 'check_path' => '/authenticate'),
+        'logout' => array('logout_path' => '/logout'),
         'users' => $app->share(function () use ($app)
         {
             return new \Gitrepos\UserProvider($app);

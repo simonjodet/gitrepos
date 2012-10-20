@@ -13,14 +13,19 @@ class UserModelTest extends \PHPUnit_Framework_TestCase
         $UserModel->create('Not a User object');
     }
 
-    public function test_create_encodes_the_users_password_and_returns_user_id()
+    private function getEncoderMock(\Silex\Application $app)
     {
-        $app = new \Silex\Application();
         $encoderFactoryMock = \Mockery::mock('\Symfony\Component\Security\Core\Encoder\EncoderFactory');
         $encoderFactoryMock
             ->shouldReceive('getEncoder->encodePassword')
             ->andReturn('encoded pwd');
         $app['security.encoder_factory'] = $encoderFactoryMock;
+return $app;
+    }
+
+    public function test_create_encodes_the_users_password_and_returns_user_id()
+    {
+        $app = $this->getEncoderMock(new \Silex\Application());
 
         $dbMock = \Mockery::mock();
         $dbMock
@@ -53,5 +58,51 @@ class UserModelTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('simon', $createdUser->getUsername());
         $this->assertEquals('encoded pwd', $createdUser->getPassword());
         $this->assertEquals('email@domain.com', $createdUser->getEmail());
+    }
+
+    public function test_create_throws_the_expected_exceptions_if_username_already_exists()
+    {
+        $this->setExpectedException('\Gitrepos\Exceptions\DuplicateUsername');
+
+        $app = $this->getEncoderMock(new \Silex\Application());
+
+        $dbMock = \Mockery::mock();
+        $dbMock
+            ->shouldReceive('insert')
+            ->andThrow('PDOException', 'SQLSTATE[23000]: Integrity constraint violation: 19 column username is not unique', 23000);
+
+        $app['db'] = $dbMock;
+
+        $UserModel = new \Gitrepos\UserModel($app);
+        $User = new \Gitrepos\User(array(
+            'username' => 'simon',
+            'email' => 'email@domain.com',
+            'password' => 'encoded pwd'
+        ));
+
+        $UserModel->create($User);
+
+    }
+    public function test_create_throws_the_expected_exceptions_if_email_already_exists()
+    {
+        $this->setExpectedException('\Gitrepos\Exceptions\DuplicateEmail');
+
+        $app = $this->getEncoderMock(new \Silex\Application());
+
+        $dbMock = \Mockery::mock();
+        $dbMock
+            ->shouldReceive('insert')
+            ->andThrow('PDOException', 'SQLSTATE[23000]: Integrity constraint violation: 19 column email is not unique', 23000);
+
+        $app['db'] = $dbMock;
+
+        $UserModel = new \Gitrepos\UserModel($app);
+        $User = new \Gitrepos\User(array(
+            'username' => 'simon',
+            'email' => 'email@domain.com',
+            'password' => 'encoded pwd'
+        ));
+
+        $UserModel->create($User);
     }
 }

@@ -146,4 +146,50 @@ class SigninTest extends WebTestCase
 
         $this->assertEquals('http://localhost/', $client->getResponse()->getTargetUrl());
     }
+
+    public function test_the_signin_form_display_duplicate_email_error()
+    {
+        //Minimum is 3 characters
+        $form = $this->buttonCrawlerNode->form(array(
+            'form[username]' => 'aaa',
+            'form[email]' => 'mail@domain.com',
+            'form[password]' => 'pa$$word',
+            'form[password2]' => 'pa$$word',
+        ));
+        $this->client->submit($form);
+        $this->crawler = $this->client->request('GET', '/signin');
+        $this->buttonCrawlerNode = $this->crawler->selectButton('submit');
+        $form = $this->buttonCrawlerNode->form(array(
+            'form[username]' => 'bbb',
+            'form[email]' => 'mail@domain.com',
+            'form[password]' => 'pa$$word',
+            'form[password2]' => 'pa$$word',
+        ));
+        $this->client->submit($form);
+        echo $this->getErrorMessage();
+        $this->assertEquals('This email address is already used.', $this->getErrorMessage());
+    }
+
+    public function test_the_signin_form_display_duplicate_username_error()
+    {
+        //Minimum is 3 characters
+        $form = $this->buttonCrawlerNode->form(array(
+            'form[username]' => 'aaa',
+            'form[email]' => 'mail@domain.com',
+            'form[password]' => 'pa$$word',
+            'form[password2]' => 'pa$$word',
+        ));
+        $this->client->submit($form);
+        $this->crawler = $this->client->request('GET', '/signin');
+        $this->buttonCrawlerNode = $this->crawler->selectButton('submit');
+        $form = $this->buttonCrawlerNode->form(array(
+            'form[username]' => 'aaa',
+            'form[email]' => 'mail2@domain.com',
+            'form[password]' => 'pa$$word',
+            'form[password2]' => 'pa$$word',
+        ));
+        $this->client->submit($form);
+        echo $this->getErrorMessage();
+        $this->assertEquals('This username is already used.', $this->getErrorMessage());
+    }
 }

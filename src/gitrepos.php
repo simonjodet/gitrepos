@@ -114,8 +114,19 @@ $app->match(
             if ($form->isValid())
             {
                 $UserModel = new \Gitrepos\UserModel($app);
-                $UserModel->create(new \Gitrepos\User($data));
-                return print_r($data, true);
+                try
+                {
+                    $UserModel->create(new \Gitrepos\User($data));
+                    return print_r($data, true);
+                }
+                catch (\Gitrepos\Exceptions\DuplicateUsername $e)
+                {
+                    $form->get('username')->addError(new FormError('This username is already used.'));
+                }
+                catch (\Gitrepos\Exceptions\DuplicateEmail $e)
+                {
+                    $form->get('email')->addError(new FormError('This email address is already used.'));
+                }
             }
         }
 

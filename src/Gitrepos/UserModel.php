@@ -2,6 +2,10 @@
 
 namespace Gitrepos;
 
+/**
+ * TODO: add created date to create()
+ *
+ */
 class UserModel
 {
     /**
@@ -25,12 +29,23 @@ class UserModel
         $encodedPassword = $this->encoderFactory->getEncoder($User)->encodePassword($User->getPassword(), $User->getSalt());
 
         $User->setPassword($encodedPassword);
-
-        $this->db->insert('users', array(
-            'username' => $User->getUsername(),
-            'email' => $User->getEmail(),
-            'password' => $User->getPassword()
-        ));
+        try
+        {
+            $this->db->insert('users', array(
+                'username' => $User->getUsername(),
+                'email' => $User->getEmail(),
+                'password' => $User->getPassword()
+            ));
+        }
+        catch (\Exception $e)
+        {
+            if ($e->getCode() == '23000' && preg_match('%column (?P<constraint>.+) is not unique%', $e->getMessage(), $matches))
+            {
+                $exceptionClass = '\Gitrepos\Exceptions\Duplicate' . ucfirst($matches['constraint']);
+                throw new $exceptionClass();
+            }
+            throw $e;
+        }
 
         $User->setId($this->db->lastInsertId());
 

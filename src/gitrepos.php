@@ -9,28 +9,28 @@ use
 \Silex\Provider\FormServiceProvider;
 
 $app = new \Silex\Application();
-$app['debug'] = true;
-
-$app['conf.twig.path'] = __DIR__ . '/views';
-$app['conf.form.secret'] = 'lk<qsfdq<s4d2q4sddf5y4(§4uè43(5§4(§35(4';
-$app['conf.locale_fallback'] = 'en';
-$app['conf.db.driver'] = 'pdo_sqlite';
-$app['conf.db.path'] = sys_get_temp_dir() . '/gitrepos.db';
+$Configuration = new \Gitrepos\Configuration(__DIR__ . '/../conf/conf.json');
+if (!$env = getenv('APP_ENV'))
+{
+    $env = null;
+}
+$app['conf'] = $Configuration->get($env);
+$app['debug'] = $app['conf']['app.debug'];
 
 $app->register(new Silex\Provider\SessionServiceProvider());
 
 $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
-    'twig.path' => $app['conf.twig.path']
+    'twig.path' => __DIR__ . '/views'
 ));
 
 $app->register(new FormServiceProvider(), array(
-    'form.secret' => $app['conf.form.secret']
+    'form.secret' => $app['conf']['form.secret']
 ));
 
 $app->register(new Silex\Provider\TranslationServiceProvider(), array(
-    'locale_fallback' => $app['conf.locale_fallback']
+    'locale_fallback' => $app['conf']['translation.locale_fallback']
 ));
 
 $app->register(new Silex\Provider\ValidatorServiceProvider());
@@ -50,8 +50,8 @@ $app['security.firewalls'] = array(
 
 $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
     'db.options' => array(
-        'driver' => $app['conf.db.driver'],
-        'path' => $app['conf.db.path']
+        'driver' => $app['conf']['db.driver'],
+        'path' => $app['conf']['db.path']
     )
 ));
 

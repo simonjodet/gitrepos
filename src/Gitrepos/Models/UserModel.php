@@ -1,37 +1,28 @@
 <?php
 
-namespace Gitrepos;
+namespace Gitrepos\Models;
 
 /**
  * TODO: add created date to create()
- *
+
  */
 class UserModel
 {
-    /**
-     * @var \Symfony\Component\Security\Core\Encoder\EncoderFactory
-     */
-    private $encoderFactory;
-
-    /**
-     * @var \Doctrine\DBAL\Connection
-     */
-    private $db;
+    private $app;
 
     public function __construct(\Silex\Application $app)
     {
-        $this->encoderFactory = $app['security.encoder_factory'];
-        $this->db = $app['db'];
+        $this->app = $app;
     }
 
     public function create(\Gitrepos\User $User)
     {
-        $encodedPassword = $this->encoderFactory->getEncoder($User)->encodePassword($User->getPassword(), $User->getSalt());
+        $encodedPassword = $this->app['security.encoder_factory']->getEncoder($User)->encodePassword($User->getPassword(), $User->getSalt());
 
         $User->setPassword($encodedPassword);
         try
         {
-            $this->db->insert('users', array(
+            $this->app['db']->insert('users', array(
                 'username' => $User->getUsername(),
                 'email' => $User->getEmail(),
                 'password' => $User->getPassword()
@@ -47,7 +38,7 @@ class UserModel
             throw $e;
         }
 
-        $User->setId($this->db->lastInsertId());
+        $User->setId($this->app['db']->lastInsertId());
 
         return $User;
     }

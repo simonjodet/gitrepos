@@ -120,7 +120,7 @@ $app->match(
 
             if ($form->isValid())
             {
-                $UserModel = new \Gitrepos\UserModel($app);
+                $UserModel = new \Gitrepos\Models\UserModel($app);
                 try
                 {
                     $User = $UserModel->create(new \Gitrepos\User($data));

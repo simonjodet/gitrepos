@@ -35,7 +35,273 @@ class UserControllerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('template', $UserController->loginAction($this->requestMock, $app));
     }
 
-    private function validate_signing_form()
+    private function get_UserController_with_mocked_buildSigninForm($app, $FormMock)
+    {
+        $UserController = \Mockery::mock('\Gitrepos\Controllers\UserController[buildSigninForm]', array($app));
+        $UserController
+            ->shouldReceive('buildSigninForm')
+            ->once()
+            ->andReturn($FormMock);
+        return $UserController;
+    }
+
+    public function test_signingAction_creates_the_correct_form()
+    {
+        $app = new \Silex\Application();
+
+        $FormMock = \Mockery::mock(array('createView' => 'form->createView', 'bind' => null));
+
+        $this->requestMock
+            ->shouldReceive('getMethod');
+        $app['request'] = $this->requestMock;
+
+        $twigMock = \Mockery::mock();
+        $twigMock
+            ->shouldReceive('render')
+            ->once()
+            ->with(
+            'signin.twig', array('form' => 'form->createView'))
+            ->andReturn('template');
+        $app['twig'] = $twigMock;
+
+        $UserController = $this->get_UserController_with_mocked_buildSigninForm($app, $FormMock);
+
+        $this->assertEquals('template', $UserController->signinAction($this->requestMock, $app));
+    }
+
+    public function test_signingAction_validates_valid_submitted_form()
+    {
+        $app = new \Silex\Application();
+
+        $FormMock = \Mockery::mock(array('createView' => 'form->createView', 'bind' => null, 'isValid' => true));
+
+        $FormMock
+            ->shouldReceive('getData')
+            ->once()
+            ->andReturn(array(
+            'password' => 'my_password',
+            'password2' => 'my_password'
+        ));
+
+        $this->requestMock
+            ->shouldReceive('getMethod')
+            ->andReturn('POST');
+        $app['request'] = $this->requestMock;
+
+        $UserModelMock = \Mockery::mock();
+        $UserModelMock
+            ->shouldReceive('create')
+            ->once()
+            ->with(\Mockery::type('\Gitrepos\User'))
+            ->andReturn(\Mockery::mock(array('getPassword' => null)));
+
+        $SecurityMock = \Mockery::mock();
+        $SecurityMock
+            ->shouldReceive('setToken')
+            ->once()
+            ->with(\Mockery::type('\Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken'));
+
+        $app['security'] = $SecurityMock;
+
+        $ModelFactoryMock = \Mockery::mock();
+        $ModelFactoryMock
+            ->shouldReceive('get')
+            ->once()
+            ->with('User')
+            ->andReturn($UserModelMock);
+
+        $app['model.factory'] = $ModelFactoryMock;
+
+        $UserController = $this->get_UserController_with_mocked_buildSigninForm($app, $FormMock);
+
+        $redirect = $UserController->signinAction($this->requestMock, $app);
+        $this->assertInstanceOf('\Symfony\Component\HttpFoundation\RedirectResponse', $redirect);
+        $this->assertEquals('/', $redirect->getTargetUrl());
+    }
+
+    public function test_signingAction_discards_form_if_password_fields_do_not_match()
+    {
+        $app = new \Silex\Application();
+
+        $FormMock = \Mockery::mock(array('createView' => 'form->createView', 'bind' => null, 'isValid' => false));
+
+        $FormMock
+            ->shouldReceive('getData')
+            ->once()
+            ->andReturn(array(
+            'password' => 'my_password',
+            'password2' => 'not-the_same_password'
+        ));
+
+
+        $FieldMock = \Mockery::mock();
+        $FieldMock
+            ->shouldReceive('addError')
+            ->once()
+            ->with(\Mockery::on(
+            function($FormError)
+            {
+                return $FormError instanceof \Symfony\Component\Form\FormError && $FormError->getMessage() == 'The two password fields don\'t match.';
+            }
+        ));
+
+        $FormMock
+            ->shouldReceive('get')
+            ->once()
+            ->with('password2')
+            ->andReturn($FieldMock);
+
+        $this->requestMock
+            ->shouldReceive('getMethod')
+            ->andReturn('POST');
+        $app['request'] = $this->requestMock;
+        $twigMock = \Mockery::mock();
+        $twigMock
+            ->shouldReceive('render')
+            ->once()
+            ->with('signin.twig', \Mockery::any())
+            ->andReturn('template');
+
+        $app['twig'] = $twigMock;
+
+
+        $UserController = $this->get_UserController_with_mocked_buildSigninForm($app, $FormMock);
+        $this->assertEquals('template', $UserController->signinAction($this->requestMock, $app));
+    }
+
+    public function test_signingAction_returns_correct_error_for_duplicate_username()
+    {
+        $app = new \Silex\Application();
+
+        $FormMock = \Mockery::mock(array('createView' => 'form->createView', 'bind' => null, 'isValid' => true));
+
+        $FormMock
+            ->shouldReceive('getData')
+            ->once()
+            ->andReturn(array(
+            'password' => 'my_password',
+            'password2' => 'my_password'
+        ));
+
+        $FieldMock = \Mockery::mock();
+        $FieldMock
+            ->shouldReceive('addError')
+            ->once()
+            ->with(\Mockery::on(
+            function($FormError)
+            {
+                return $FormError instanceof \Symfony\Component\Form\FormError && $FormError->getMessage() == 'This username is already used.';
+            }
+        ));
+
+        $FormMock
+            ->shouldReceive('get')
+            ->once()
+            ->with('username')
+            ->andReturn($FieldMock);
+
+        $this->requestMock
+            ->shouldReceive('getMethod')
+            ->andReturn('POST');
+        $app['request'] = $this->requestMock;
+
+        $UserModelMock = \Mockery::mock();
+        $UserModelMock
+            ->shouldReceive('create')
+            ->once()
+            ->with(\Mockery::type('\Gitrepos\User'))
+            ->andThrow(new \Gitrepos\Exceptions\DuplicateUsername);
+
+        $ModelFactoryMock = \Mockery::mock();
+        $ModelFactoryMock
+            ->shouldReceive('get')
+            ->once()
+            ->with('User')
+            ->andReturn($UserModelMock);
+        $app['model.factory'] = $ModelFactoryMock;
+
+
+        $twigMock = \Mockery::mock();
+        $twigMock
+            ->shouldReceive('render')
+            ->once()
+            ->with('signin.twig', \Mockery::any())
+            ->andReturn('template');
+
+        $app['twig'] = $twigMock;
+
+
+        $UserController = $this->get_UserController_with_mocked_buildSigninForm($app, $FormMock);
+        $this->assertEquals('template', $UserController->signinAction($this->requestMock, $app));
+    }
+
+    public function test_signingAction_returns_correct_error_for_duplicate_email()
+    {
+        $app = new \Silex\Application();
+
+        $FormMock = \Mockery::mock(array('createView' => 'form->createView', 'bind' => null, 'isValid' => true));
+
+        $FormMock
+            ->shouldReceive('getData')
+            ->once()
+            ->andReturn(array(
+            'password' => 'my_password',
+            'password2' => 'my_password'
+        ));
+
+        $FieldMock = \Mockery::mock();
+        $FieldMock
+            ->shouldReceive('addError')
+            ->once()
+            ->with(\Mockery::on(
+            function($FormError)
+            {
+                return $FormError instanceof \Symfony\Component\Form\FormError && $FormError->getMessage() == 'This email address is already used.';
+            }
+        ));
+
+        $FormMock
+            ->shouldReceive('get')
+            ->once()
+            ->with('email')
+            ->andReturn($FieldMock);
+
+        $this->requestMock
+            ->shouldReceive('getMethod')
+            ->andReturn('POST');
+        $app['request'] = $this->requestMock;
+
+        $UserModelMock = \Mockery::mock();
+        $UserModelMock
+            ->shouldReceive('create')
+            ->once()
+            ->with(\Mockery::type('\Gitrepos\User'))
+            ->andThrow(new \Gitrepos\Exceptions\DuplicateEmail);
+
+        $ModelFactoryMock = \Mockery::mock();
+        $ModelFactoryMock
+            ->shouldReceive('get')
+            ->once()
+            ->with('User')
+            ->andReturn($UserModelMock);
+        $app['model.factory'] = $ModelFactoryMock;
+
+
+        $twigMock = \Mockery::mock();
+        $twigMock
+            ->shouldReceive('render')
+            ->once()
+            ->with('signin.twig', \Mockery::any())
+            ->andReturn('template');
+
+        $app['twig'] = $twigMock;
+
+
+        $UserController = $this->get_UserController_with_mocked_buildSigninForm($app, $FormMock);
+        $this->assertEquals('template', $UserController->signinAction($this->requestMock, $app));
+    }
+
+    public function test_buildSigninForm_returns_the_correct_form()
     {
         $app = new \Silex\Application();
 
@@ -86,287 +352,13 @@ class UserControllerTest extends \PHPUnit_Framework_TestCase
             ))
             ->once()
             ->andReturn($formFactoryMock);
-
         $app['form.factory'] = $formFactoryMock;
-        return $app;
-    }
-
-    public function test_signingAction_creates_the_correct_form()
-    {
-        $app = $this->validate_signing_form();
-
         $app['form.factory']
             ->shouldReceive('getForm')
             ->once()
-            ->andReturn(\Mockery::mock(array('createView' => 'form->createView', 'bind' => null)));
-
-
-        $this->requestMock
-            ->shouldReceive('getMethod');
-        $app['request'] = $this->requestMock;
-
-        $twigMock = \Mockery::mock();
-        $twigMock
-            ->shouldReceive('render')
-            ->once()
-            ->with(
-            'signin.twig', array('form' => 'form->createView'))
-            ->andReturn('template');
-        $app['twig'] = $twigMock;
-
+            ->andReturn('\Symfony\Component\Form\Form');
 
         $UserController = new \Gitrepos\Controllers\UserController();
-        $this->assertEquals('template', $UserController->signinAction($this->requestMock, $app));
-    }
-
-    public function test_signingAction_validates_valid_submitted_form()
-    {
-        $app = $this->validate_signing_form();
-
-        $FormMock = \Mockery::mock(array('createView' => 'form->createView', 'bind' => null, 'isValid' => true));
-
-        $FormMock
-            ->shouldReceive('getData')
-            ->once()
-            ->andReturn(array(
-            'password' => 'my_password',
-            'password2' => 'my_password'
-        ));
-
-        $app['form.factory']
-            ->shouldReceive('getForm')
-            ->once()
-            ->andReturn($FormMock);
-
-        $this->requestMock
-            ->shouldReceive('getMethod')
-            ->andReturn('POST');
-        $app['request'] = $this->requestMock;
-
-        $UserModelMock = \Mockery::mock();
-        $UserModelMock
-            ->shouldReceive('create')
-            ->once()
-            ->with(\Mockery::type('\Gitrepos\User'))
-            ->andReturn(\Mockery::mock(array('getPassword' => null)));
-
-        $SecurityMock = \Mockery::mock();
-        $SecurityMock
-            ->shouldReceive('setToken')
-            ->once()
-            ->with(\Mockery::type('\Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken'));
-
-        $app['security'] = $SecurityMock;
-
-        $ModelFactoryMock = \Mockery::mock();
-        $ModelFactoryMock
-            ->shouldReceive('get')
-            ->once()
-            ->with('User')
-            ->andReturn($UserModelMock);
-
-        $app['model.factory'] = $ModelFactoryMock;
-
-        $UserController = new \Gitrepos\Controllers\UserController();
-        $redirect = $UserController->signinAction($this->requestMock, $app);
-        $this->assertInstanceOf('\Symfony\Component\HttpFoundation\RedirectResponse', $redirect);
-        $this->assertEquals('/', $redirect->getTargetUrl());
-    }
-
-    public function test_signingAction_discards_form_if_password_fields_do_not_match()
-    {
-        $app = $this->validate_signing_form();
-
-        $FormMock = \Mockery::mock(array('createView' => 'form->createView', 'bind' => null, 'isValid' => false));
-
-        $FormMock
-            ->shouldReceive('getData')
-            ->once()
-            ->andReturn(array(
-            'password' => 'my_password',
-            'password2' => 'not-the_same_password'
-        ));
-
-
-        $FieldMock = \Mockery::mock();
-        $FieldMock
-            ->shouldReceive('addError')
-            ->once()
-            ->with(\Mockery::on(
-            function($FormError)
-            {
-                return $FormError instanceof \Symfony\Component\Form\FormError && $FormError->getMessage() == 'The two password fields don\'t match.';
-            }
-        ));
-
-        $FormMock
-            ->shouldReceive('get')
-            ->once()
-            ->with('password2')
-            ->andReturn($FieldMock);
-
-        $app['form.factory']
-            ->shouldReceive('getForm')
-            ->once()
-            ->andReturn($FormMock);
-
-        $this->requestMock
-            ->shouldReceive('getMethod')
-            ->andReturn('POST');
-        $app['request'] = $this->requestMock;
-        $twigMock = \Mockery::mock();
-        $twigMock
-            ->shouldReceive('render')
-            ->once()
-            ->with('signin.twig', \Mockery::any())
-            ->andReturn('template');
-
-        $app['twig'] = $twigMock;
-
-
-        $UserController = new \Gitrepos\Controllers\UserController();
-        $this->assertEquals('template', $UserController->signinAction($this->requestMock, $app));
-    }
-
-    public function test_signingAction_returns_correct_error_for_duplicate_username()
-    {
-        $app = $this->validate_signing_form();
-
-        $FormMock = \Mockery::mock(array('createView' => 'form->createView', 'bind' => null, 'isValid' => true));
-
-        $FormMock
-            ->shouldReceive('getData')
-            ->once()
-            ->andReturn(array(
-            'password' => 'my_password',
-            'password2' => 'my_password'
-        ));
-
-        $FieldMock = \Mockery::mock();
-        $FieldMock
-            ->shouldReceive('addError')
-            ->once()
-            ->with(\Mockery::on(
-            function($FormError)
-            {
-                return $FormError instanceof \Symfony\Component\Form\FormError && $FormError->getMessage() == 'This username is already used.';
-            }
-        ));
-
-        $FormMock
-            ->shouldReceive('get')
-            ->once()
-            ->with('username')
-            ->andReturn($FieldMock);
-
-        $app['form.factory']
-            ->shouldReceive('getForm')
-            ->once()
-            ->andReturn($FormMock);
-
-        $this->requestMock
-            ->shouldReceive('getMethod')
-            ->andReturn('POST');
-        $app['request'] = $this->requestMock;
-
-        $UserModelMock = \Mockery::mock();
-        $UserModelMock
-            ->shouldReceive('create')
-            ->once()
-            ->with(\Mockery::type('\Gitrepos\User'))
-            ->andThrow(new \Gitrepos\Exceptions\DuplicateUsername);
-
-        $ModelFactoryMock = \Mockery::mock();
-        $ModelFactoryMock
-            ->shouldReceive('get')
-            ->once()
-            ->with('User')
-            ->andReturn($UserModelMock);
-        $app['model.factory'] = $ModelFactoryMock;
-
-
-        $twigMock = \Mockery::mock();
-        $twigMock
-            ->shouldReceive('render')
-            ->once()
-            ->with('signin.twig', \Mockery::any())
-            ->andReturn('template');
-
-        $app['twig'] = $twigMock;
-
-
-        $UserController = new \Gitrepos\Controllers\UserController();
-        $this->assertEquals('template', $UserController->signinAction($this->requestMock, $app));
-    }
-
-    public function test_signingAction_returns_correct_error_for_duplicate_email()
-    {
-        $app = $this->validate_signing_form();
-
-        $FormMock = \Mockery::mock(array('createView' => 'form->createView', 'bind' => null, 'isValid' => true));
-
-        $FormMock
-            ->shouldReceive('getData')
-            ->once()
-            ->andReturn(array(
-            'password' => 'my_password',
-            'password2' => 'my_password'
-        ));
-
-        $FieldMock = \Mockery::mock();
-        $FieldMock
-            ->shouldReceive('addError')
-            ->once()
-            ->with(\Mockery::on(
-            function($FormError)
-            {
-                return $FormError instanceof \Symfony\Component\Form\FormError && $FormError->getMessage() == 'This email address is already used.';
-            }
-        ));
-
-        $FormMock
-            ->shouldReceive('get')
-            ->once()
-            ->with('email')
-            ->andReturn($FieldMock);
-
-        $app['form.factory']
-            ->shouldReceive('getForm')
-            ->once()
-            ->andReturn($FormMock);
-
-        $this->requestMock
-            ->shouldReceive('getMethod')
-            ->andReturn('POST');
-        $app['request'] = $this->requestMock;
-
-        $UserModelMock = \Mockery::mock();
-        $UserModelMock
-            ->shouldReceive('create')
-            ->once()
-            ->with(\Mockery::type('\Gitrepos\User'))
-            ->andThrow(new \Gitrepos\Exceptions\DuplicateEmail);
-
-        $ModelFactoryMock = \Mockery::mock();
-        $ModelFactoryMock
-            ->shouldReceive('get')
-            ->once()
-            ->with('User')
-            ->andReturn($UserModelMock);
-        $app['model.factory'] = $ModelFactoryMock;
-
-
-        $twigMock = \Mockery::mock();
-        $twigMock
-            ->shouldReceive('render')
-            ->once()
-            ->with('signin.twig', \Mockery::any())
-            ->andReturn('template');
-
-        $app['twig'] = $twigMock;
-
-
-        $UserController = new \Gitrepos\Controllers\UserController();
-        $this->assertEquals('template', $UserController->signinAction($this->requestMock, $app));
+        $this->assertEquals('\Symfony\Component\Form\Form', $UserController->buildSigninForm($app));
     }
 }

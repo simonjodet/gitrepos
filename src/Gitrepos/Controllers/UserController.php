@@ -24,6 +24,45 @@ class UserController
         /**
          * @var $form \Symfony\Component\Form\Form
          */
+        $form = $this->buildSigninForm($app);
+
+        if ($app['request']->getMethod() == 'POST')
+        {
+            $form->bind($app['request']);
+            $data = $form->getData();
+            if ($data['password2'] != $data['password'])
+            {
+                $form->get('password2')->addError(new FormError('The two password fields don\'t match.'));
+            }
+
+            if ($form->isValid())
+            {
+                $UserModel = $app['model.factory']->get('User');
+                try
+                {
+                    $User = $UserModel->create(new \Gitrepos\User($data));
+                    $app['security']->setToken(new UsernamePasswordToken($User, $User->getPassword(), 'user_firewall', array('ROLE_USER')));
+                    return $app->redirect('/');
+                }
+                catch (\Gitrepos\Exceptions\DuplicateUsername $e)
+                {
+                    $form->get('username')->addError(new FormError('This username is already used.'));
+                }
+                catch (\Gitrepos\Exceptions\DuplicateEmail $e)
+                {
+                    $form->get('email')->addError(new FormError('This email address is already used.'));
+                }
+            }
+        }
+
+        return $app['twig']->render('signin.twig', array('form' => $form->createView()));
+    }
+
+    public function buildSigninForm($app)
+    {
+        /**
+         * @var $form \Symfony\Component\Form\Form
+         */
         $form = $app['form.factory']->createBuilder('form')
             ->add('username',
             'text',
@@ -57,35 +96,6 @@ class UserController
             ))
             ->getForm();
 
-        if ($app['request']->getMethod() == 'POST')
-        {
-            $form->bind($app['request']);
-            $data = $form->getData();
-            if ($data['password2'] != $data['password'])
-            {
-                $form->get('password2')->addError(new FormError('The two password fields don\'t match.'));
-            }
-
-            if ($form->isValid())
-            {
-                $UserModel = $app['model.factory']->get('User');
-                try
-                {
-                    $User = $UserModel->create(new \Gitrepos\User($data));
-                    $app['security']->setToken(new UsernamePasswordToken($User, $User->getPassword(), 'user_firewall', array('ROLE_USER')));
-                    return $app->redirect('/');
-                }
-                catch (\Gitrepos\Exceptions\DuplicateUsername $e)
-                {
-                    $form->get('username')->addError(new FormError('This username is already used.'));
-                }
-                catch (\Gitrepos\Exceptions\DuplicateEmail $e)
-                {
-                    $form->get('email')->addError(new FormError('This email address is already used.'));
-                }
-            }
-        }
-
-        return $app['twig']->render('signin.twig', array('form' => $form->createView()));
+        return $form;
     }
 }

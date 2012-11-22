@@ -8,7 +8,7 @@ class UserModelTest extends \PHPUnit_Framework_TestCase
 
         $AppMock = \Mockery::mock('\Silex\Application');
 
-        $UserModel = new \Gitrepos\UserModel($AppMock);
+        $UserModel = new \Gitrepos\Models\UserModel($AppMock);
 
         $UserModel->create('Not a User object');
     }
@@ -46,7 +46,7 @@ return $app;
             ->once();
         $app['db'] = $dbMock;
 
-        $UserModel = new \Gitrepos\UserModel($app);
+        $UserModel = new \Gitrepos\Models\UserModel($app);
         $User = new \Gitrepos\User(array(
             'username' => 'simon',
             'email' => 'email@domain.com',
@@ -73,7 +73,7 @@ return $app;
 
         $app['db'] = $dbMock;
 
-        $UserModel = new \Gitrepos\UserModel($app);
+        $UserModel = new \Gitrepos\Models\UserModel($app);
         $User = new \Gitrepos\User(array(
             'username' => 'simon',
             'email' => 'email@domain.com',
@@ -96,7 +96,7 @@ return $app;
 
         $app['db'] = $dbMock;
 
-        $UserModel = new \Gitrepos\UserModel($app);
+        $UserModel = new \Gitrepos\Models\UserModel($app);
         $User = new \Gitrepos\User(array(
             'username' => 'simon',
             'email' => 'email@domain.com',

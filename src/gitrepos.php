@@ -17,6 +17,14 @@ if (!$env = getenv('APP_ENV'))
 $app['conf'] = $Configuration->get($env);
 $app['debug'] = $app['conf']['app.debug'];
 
+date_default_timezone_set($app['conf']['timezone']);
+
+$app->register(new Silex\Provider\MonologServiceProvider(), array(
+    'monolog.name' => 'GR',
+    'monolog.logfile' => $app['conf']['monolog.logfile'],
+    'monolog.level' => constant('\Monolog\Logger::' . $app['conf']['monolog.level'])
+));
+
 $app->register(new Silex\Provider\SessionServiceProvider());
 
 $app->register(new Silex\Provider\UrlGeneratorServiceProvider());

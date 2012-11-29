@@ -54,7 +54,7 @@ class User implements \Symfony\Component\Security\Core\User\AdvancedUserInterfac
     /**
      * @var array
      */
-    private $roles = array();
+    private $roles = array('ROLE_USER');
 
 
     /**

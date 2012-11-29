@@ -52,8 +52,8 @@ $app['security.firewalls'] = array(
         'users' => $app->share(function () use ($app)
         {
             return new \Gitrepos\UserProvider($app);
-        }),
-    ),
+        })
+    )
 );
 
 $app->register(new Silex\Provider\DoctrineServiceProvider(), array(

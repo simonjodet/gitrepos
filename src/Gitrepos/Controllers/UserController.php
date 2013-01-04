@@ -6,8 +6,7 @@ use \Silex\Application,
     \Symfony\Component\HttpFoundation\Request,
     \Symfony\Component\Form\FormError,
     \Symfony\Component\Validator\Constraints as Assert,
-    \Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken,
-    \Silex\Provider\FormServiceProvider;
+    \Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class UserController
 {

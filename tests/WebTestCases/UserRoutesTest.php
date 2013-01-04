@@ -1,5 +1,5 @@
 <?php
-use \Silex\WebTestCase;
+namespace Tests\WebTestCases;
 
 class UserRoutesTest extends WebTestCase
 {

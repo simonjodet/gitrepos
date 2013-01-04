@@ -3,7 +3,6 @@ namespace Tests\WebTestCases;
 
 class SigninTest extends WebTestCase
 {
-
     /**
      * @var \Symfony\Component\HttpKernel\Client
      */

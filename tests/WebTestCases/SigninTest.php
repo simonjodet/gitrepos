@@ -13,7 +13,7 @@ class SigninTest extends WebTestCase
 
     public function createApplication()
     {
-        $app = require __DIR__ . '/../../src/gitrepos.php';
+        $app = require __DIR__ . '/../../src/bootstrap.php';
         $app['debug'] = true;
         $app['session.test'] = true;
         unset($app['exception_handler']);

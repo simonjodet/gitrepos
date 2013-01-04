@@ -15,4 +15,22 @@ abstract class WebTestCase extends \Silex\WebTestCase
         $client->submit($form);
         return $client;
     }
+
+    public function createApplication()
+    {
+        $app = require __DIR__ . '/../../src/bootstrap.php';
+        $app['debug'] = true;
+        $app['session.test'] = true;
+        $firewalls = $app['security.firewalls'];
+        $firewalls['user_firewall']['users'] = array(
+            'admin' => array(
+                'ROLE_USER',
+                '5FZ2Z8QIkA7UTZ4BYkoC+GsReLf569mSKDsfods6LYQ8t+a8EW9oaircfMpmaLbPBh4FOBiiFyLfuZmTSUwzZg=='
+            )
+        );
+        $app['security.firewalls'] = $firewalls;
+
+        unset($app['exception_handler']);
+        return $app;
+    }
 }

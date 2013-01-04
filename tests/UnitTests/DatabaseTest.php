@@ -32,26 +32,26 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
         $Database
             ->shouldReceive('getSchemas')
             ->once()
-            ->andReturn(array(
-            1 => function()
-            {
-                $SchemaMock1 = \Mockery::mock();
-                $SchemaMock1
-                    ->shouldReceive('toSql')
-                    ->andReturn(array('SQL query 1'));
-                return $SchemaMock1;
-            },
-            2 => function()
-            {
-                $SchemaMock2 = \Mockery::mock();
-                $SchemaMock2
-                    ->shouldReceive('toSql')
-                    ->once()
-                    ->andReturn(array('SQL query 2'));
-                return $SchemaMock2;
-            }
+            ->andReturn(
+            array(
+                1 => function () {
+                    $SchemaMock1 = \Mockery::mock();
+                    $SchemaMock1
+                        ->shouldReceive('toSql')
+                        ->andReturn(array('SQL query 1'));
+                    return $SchemaMock1;
+                },
+                2 => function () {
+                    $SchemaMock2 = \Mockery::mock();
+                    $SchemaMock2
+                        ->shouldReceive('toSql')
+                        ->once()
+                        ->andReturn(array('SQL query 2'));
+                    return $SchemaMock2;
+                }
 
-        ));
+            )
+        );
 
         $this->assertEquals(
             array(
@@ -73,10 +73,8 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_array($schemas));
         $this->assertTrue(count($schemas) > 0);
 
-        foreach ($schemas as $schema)
-        {
-            if (!is_callable($schema))
-            {
+        foreach ($schemas as $schema) {
+            if (!is_callable($schema)) {
                 $this->fail('All schemas should be callable');
             }
         }

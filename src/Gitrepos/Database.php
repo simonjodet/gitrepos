@@ -19,8 +19,7 @@ class Database
         $Schema = new \Doctrine\DBAL\Schema\Schema();
 
         $schemas = array(
-            1 => function() use($Schema)
-            {
+            1 => function () use ($Schema) {
                 $systemTable = $Schema->createTable('system');
                 $systemTable->addColumn('system_key', 'string', array('length' => 255));
                 $systemTable->addColumn('value', 'string', array('length' => 255));
@@ -44,24 +43,22 @@ class Database
     {
         $schema_versions = $this->getSchemas();
 
-        if (is_null($version))
-        {
-            $version = key(array_slice($schema_versions, -1, 1, TRUE));
+        if (is_null($version)) {
+            $version = key(array_slice($schema_versions, -1, 1, true));
         }
-        if (!array_key_exists($version, $schema_versions))
-        {
+        if (!array_key_exists($version, $schema_versions)) {
             throw new \Exception('Unknown schema version');
         }
         $schema = $schema_versions[$version]();
 
         $SchemaManager = $this->conn->getSchemaManager();
 
-        if ($SchemaManager->tablesExist('system') && count($this->conn->fetchAll("SELECT * FROM system WHERE system_key = 'database_schema_version';")) > 0)
-        {
+        if ($SchemaManager->tablesExist('system') && count(
+            $this->conn->fetchAll("SELECT * FROM system WHERE system_key = 'database_schema_version';")
+        ) > 0
+        ) {
             $database_schema_version_query = "UPDATE system SET value = " . $version . " WHERE system_key = 'database_schema_version'";
-        }
-        else
-        {
+        } else {
             $database_schema_version_query = "INSERT INTO system (system_key, value) VALUES ('database_schema_version', " . $version . ")";
         }
 
@@ -76,8 +73,7 @@ class Database
         $tables = array();
         $SchemaManager = $this->conn->getSchemaManager();
 
-        foreach ($SchemaManager->listTables() as $table)
-        {
+        foreach ($SchemaManager->listTables() as $table) {
             $tables[] = $table->getName();
         }
         return $tables;
@@ -91,14 +87,12 @@ class Database
     public function reset($version = null)
     {
         $tables = $this->listTables();
-        foreach ($tables as $table)
-        {
+        foreach ($tables as $table) {
             $this->dropTable($table);
         }
 
         $schema = $this->getSchemaSql($version);
-        foreach ($schema as $query)
-        {
+        foreach ($schema as $query) {
             $this->conn->query($query);
         }
 

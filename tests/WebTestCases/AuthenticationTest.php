@@ -33,12 +33,14 @@ class AuthenticationTest extends WebTestCase
 
     private function createUser()
     {
-        $form = $this->buttonCrawlerNode->form(array(
-            'form[username]' => 'username',
-            'form[email]' => 'mail@domain.com',
-            'form[password]' => 'pa$$word',
-            'form[password2]' => 'pa$$word',
-        ));
+        $form = $this->buttonCrawlerNode->form(
+            array(
+                'form[username]' => 'username',
+                'form[email]' => 'mail@domain.com',
+                'form[password]' => 'pa$$word',
+                'form[password2]' => 'pa$$word',
+            )
+        );
         $this->client->submit($form);
     }
 
@@ -56,10 +58,12 @@ class AuthenticationTest extends WebTestCase
         $client = $this->createClient();
         $crawler = $client->request('GET', '/login');
         $buttonCrawlerNode = $crawler->selectButton('submit');
-        $form = $buttonCrawlerNode->form(array(
-            '_username' => 'username',
-            '_password' => 'pa$$word',
-        ));
+        $form = $buttonCrawlerNode->form(
+            array(
+                '_username' => 'username',
+                '_password' => 'pa$$word',
+            )
+        );
         $client->submit($form);
 
         $this->assertEquals('http://localhost/', $client->getResponse()->getTargetUrl());
@@ -76,15 +80,18 @@ class AuthenticationTest extends WebTestCase
         $this->assertEquals('Bad credentials', trim($client->getCrawler()->filter('form')->first()->text()));
     }
 
-    public function test_logout_works_as_expected(){
+    public function test_logout_works_as_expected()
+    {
         $this->createUser();
         $client = $this->createClient();
         $crawler = $client->request('GET', '/login');
         $buttonCrawlerNode = $crawler->selectButton('submit');
-        $form = $buttonCrawlerNode->form(array(
-            '_username' => 'username',
-            '_password' => 'pa$$word',
-        ));
+        $form = $buttonCrawlerNode->form(
+            array(
+                '_username' => 'username',
+                '_password' => 'pa$$word',
+            )
+        );
         $client->submit($form);
         $client->request('GET', '/logout');
         $client->followRedirect();

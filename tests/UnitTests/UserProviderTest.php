@@ -26,7 +26,10 @@ class UserProviderTest extends \PHPUnit_Framework_TestCase
 
     public function test_loadUserByUsername_throws_exception_if_db_fetch_fails()
     {
-        $this->setExpectedException('\Symfony\Component\Security\Core\Exception\UsernameNotFoundException', 'Username "username" does not exist.');
+        $this->setExpectedException(
+            '\Symfony\Component\Security\Core\Exception\UsernameNotFoundException',
+            'Username "username" does not exist.'
+        );
         $app = new \Silex\Application();
 
         $ConnectionMock = \Mockery::mock('\Doctrine\DBAL\Connection');
@@ -66,7 +69,10 @@ class UserProviderTest extends \PHPUnit_Framework_TestCase
     {
         $User = \Mockery::mock('\Symfony\Component\Security\Core\User\UserInterface');
 
-        $this->setExpectedException('\Symfony\Component\Security\Core\Exception\UnsupportedUserException', 'Instances of "' . get_class($User) . '" are not supported.');
+        $this->setExpectedException(
+            '\Symfony\Component\Security\Core\Exception\UnsupportedUserException',
+            'Instances of "' . get_class($User) . '" are not supported.'
+        );
 
         $app = new \Silex\Application();
 

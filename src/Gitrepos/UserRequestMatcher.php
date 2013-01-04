@@ -1,5 +1,6 @@
 <?php
 namespace Gitrepos;
+
 use \Symfony\Component\HttpFoundation\Request;
 
 class UserRequestMatcher implements \Symfony\Component\HttpFoundation\RequestMatcherInterface

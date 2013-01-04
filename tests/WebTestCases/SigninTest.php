@@ -51,12 +51,14 @@ class SigninTest extends WebTestCase
     public function test_the_signin_form_does_not_allow_short_username()
     {
         //Minimum is 3 characters
-        $form = $this->buttonCrawlerNode->form(array(
-            'form[username]' => 'aa',
-            'form[email]' => 'mail@domain.com',
-            'form[password]' => 'pa$$word',
-            'form[password2]' => 'pa$$word',
-        ));
+        $form = $this->buttonCrawlerNode->form(
+            array(
+                'form[username]' => 'aa',
+                'form[email]' => 'mail@domain.com',
+                'form[password]' => 'pa$$word',
+                'form[password2]' => 'pa$$word',
+            )
+        );
         $this->client->submit($form);
         $this->assertEquals('This value is too short. It should have 3 characters or more.', $this->getErrorMessage());
     }
@@ -64,24 +66,28 @@ class SigninTest extends WebTestCase
     public function test_the_signin_form_does_not_allow_long_username()
     {
         //Maximum is 64 characters
-        $form = $this->buttonCrawlerNode->form(array(
-            'form[username]' => 'abcde012345678901234567890123456789012345678901234567890123456789',
-            'form[email]' => 'mail@domain.com',
-            'form[password]' => 'pa$$word',
-            'form[password2]' => 'pa$$word',
-        ));
+        $form = $this->buttonCrawlerNode->form(
+            array(
+                'form[username]' => 'abcde012345678901234567890123456789012345678901234567890123456789',
+                'form[email]' => 'mail@domain.com',
+                'form[password]' => 'pa$$word',
+                'form[password2]' => 'pa$$word',
+            )
+        );
         $this->client->submit($form);
         $this->assertEquals('This value is too long. It should have 64 characters or less.', $this->getErrorMessage());
     }
 
     public function test_the_signin_form_does_not_allow_non_emails()
     {
-        $form = $this->buttonCrawlerNode->form(array(
-            'form[username]' => 'username',
-            'form[email]' => 'maildomain.com',
-            'form[password]' => 'pa$$word',
-            'form[password2]' => 'pa$$word',
-        ));
+        $form = $this->buttonCrawlerNode->form(
+            array(
+                'form[username]' => 'username',
+                'form[email]' => 'maildomain.com',
+                'form[password]' => 'pa$$word',
+                'form[password2]' => 'pa$$word',
+            )
+        );
         $this->client->submit($form);
         $this->assertEquals('This value is not a valid email address.', $this->getErrorMessage());
     }
@@ -89,12 +95,14 @@ class SigninTest extends WebTestCase
     public function test_the_signin_form_does_short_passwords()
     {
         //Minimum is 6 characters
-        $form = $this->buttonCrawlerNode->form(array(
-            'form[username]' => 'username',
-            'form[email]' => 'mail@domain.com',
-            'form[password]' => '12345',
-            'form[password2]' => '12345',
-        ));
+        $form = $this->buttonCrawlerNode->form(
+            array(
+                'form[username]' => 'username',
+                'form[email]' => 'mail@domain.com',
+                'form[password]' => '12345',
+                'form[password2]' => '12345',
+            )
+        );
         $this->client->submit($form);
         $this->assertEquals('This value is too short. It should have 6 characters or more.', $this->getErrorMessage());
     }
@@ -102,24 +110,28 @@ class SigninTest extends WebTestCase
     public function test_the_signin_form_does_long_passwords()
     {
         //Maximum is 128 characters
-        $form = $this->buttonCrawlerNode->form(array(
-            'form[username]' => 'username',
-            'form[email]' => 'mail@domain.com',
-            'form[password]' => 'abcdefghi012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789',
-            'form[password2]' => 'abcdefghi012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789',
-        ));
+        $form = $this->buttonCrawlerNode->form(
+            array(
+                'form[username]' => 'username',
+                'form[email]' => 'mail@domain.com',
+                'form[password]' => 'abcdefghi012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789',
+                'form[password2]' => 'abcdefghi012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789',
+            )
+        );
         $this->client->submit($form);
         $this->assertEquals('This value is too long. It should have 128 characters or less.', $this->getErrorMessage());
     }
 
     public function test_the_signin_form_does_different_passwords()
     {
-        $form = $this->buttonCrawlerNode->form(array(
-            'form[username]' => 'username',
-            'form[email]' => 'mail@domain.com',
-            'form[password]' => '123456',
-            'form[password2]' => 'abcdef',
-        ));
+        $form = $this->buttonCrawlerNode->form(
+            array(
+                'form[username]' => 'username',
+                'form[email]' => 'mail@domain.com',
+                'form[password]' => '123456',
+                'form[password2]' => 'abcdef',
+            )
+        );
         $this->client->submit($form);
         $this->assertEquals('The two password fields don\'t match.', $this->getErrorMessage());
     }
@@ -127,12 +139,14 @@ class SigninTest extends WebTestCase
 
     public function test_successful_signin_redirects_to_root_route()
     {
-        $form = $this->buttonCrawlerNode->form(array(
-            'form[username]' => 'username',
-            'form[email]' => 'mail@domain.com',
-            'form[password]' => 'pa$$word',
-            'form[password2]' => 'pa$$word',
-        ));
+        $form = $this->buttonCrawlerNode->form(
+            array(
+                'form[username]' => 'username',
+                'form[email]' => 'mail@domain.com',
+                'form[password]' => 'pa$$word',
+                'form[password2]' => 'pa$$word',
+            )
+        );
         $this->client->submit($form);
 
         $this->assertEquals('/', $this->client->getResponse()->getTargetUrl());
@@ -140,42 +154,50 @@ class SigninTest extends WebTestCase
 
     public function test_the_signin_form_display_duplicate_email_error()
     {
-        $form = $this->buttonCrawlerNode->form(array(
-            'form[username]' => 'aaa',
-            'form[email]' => 'mail@domain.com',
-            'form[password]' => 'pa$$word',
-            'form[password2]' => 'pa$$word',
-        ));
+        $form = $this->buttonCrawlerNode->form(
+            array(
+                'form[username]' => 'aaa',
+                'form[email]' => 'mail@domain.com',
+                'form[password]' => 'pa$$word',
+                'form[password2]' => 'pa$$word',
+            )
+        );
         $this->client->submit($form);
         $this->crawler = $this->client->request('GET', '/signin');
         $this->buttonCrawlerNode = $this->crawler->selectButton('submit');
-        $form = $this->buttonCrawlerNode->form(array(
-            'form[username]' => 'bbb',
-            'form[email]' => 'mail@domain.com',
-            'form[password]' => 'pa$$word',
-            'form[password2]' => 'pa$$word',
-        ));
+        $form = $this->buttonCrawlerNode->form(
+            array(
+                'form[username]' => 'bbb',
+                'form[email]' => 'mail@domain.com',
+                'form[password]' => 'pa$$word',
+                'form[password2]' => 'pa$$word',
+            )
+        );
         $this->client->submit($form);
         $this->assertEquals('This email address is already used.', $this->getErrorMessage());
     }
 
     public function test_the_signin_form_display_duplicate_username_error()
     {
-        $form = $this->buttonCrawlerNode->form(array(
-            'form[username]' => 'aaa',
-            'form[email]' => 'mail@domain.com',
-            'form[password]' => 'pa$$word',
-            'form[password2]' => 'pa$$word',
-        ));
+        $form = $this->buttonCrawlerNode->form(
+            array(
+                'form[username]' => 'aaa',
+                'form[email]' => 'mail@domain.com',
+                'form[password]' => 'pa$$word',
+                'form[password2]' => 'pa$$word',
+            )
+        );
         $this->client->submit($form);
         $this->crawler = $this->client->request('GET', '/signin');
         $this->buttonCrawlerNode = $this->crawler->selectButton('submit');
-        $form = $this->buttonCrawlerNode->form(array(
-            'form[username]' => 'aaa',
-            'form[email]' => 'mail2@domain.com',
-            'form[password]' => 'pa$$word',
-            'form[password2]' => 'pa$$word',
-        ));
+        $form = $this->buttonCrawlerNode->form(
+            array(
+                'form[username]' => 'aaa',
+                'form[email]' => 'mail2@domain.com',
+                'form[password]' => 'pa$$word',
+                'form[password2]' => 'pa$$word',
+            )
+        );
         $this->client->submit($form);
         $this->assertEquals('This username is already used.', $this->getErrorMessage());
     }

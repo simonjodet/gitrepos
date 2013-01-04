@@ -1,5 +1,6 @@
 <?php
 namespace Tests\UnitTests;
+
 class UserTest extends \PHPUnit_Framework_TestCase
 {
     public function test_constructor_accepts_data()

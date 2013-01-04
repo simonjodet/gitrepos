@@ -1,5 +1,6 @@
 <?php
 namespace Tests\UnitTests;
+
 class UserModelTest extends \PHPUnit_Framework_TestCase
 {
     public function test_create_expects_a_user_object()
@@ -20,7 +21,7 @@ class UserModelTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('getEncoder->encodePassword')
             ->andReturn('encoded pwd');
         $app['security.encoder_factory'] = $encoderFactoryMock;
-return $app;
+        return $app;
     }
 
     public function test_create_encodes_the_users_password_and_returns_user_id()
@@ -69,7 +70,11 @@ return $app;
         $dbMock = \Mockery::mock();
         $dbMock
             ->shouldReceive('insert')
-            ->andThrow('PDOException', 'SQLSTATE[23000]: Integrity constraint violation: 19 column username is not unique', 23000);
+            ->andThrow(
+            'PDOException',
+            'SQLSTATE[23000]: Integrity constraint violation: 19 column username is not unique',
+            23000
+        );
 
         $app['db'] = $dbMock;
 
@@ -83,6 +88,7 @@ return $app;
         $UserModel->create($User);
 
     }
+
     public function test_create_throws_the_expected_exceptions_if_email_already_exists()
     {
         $this->setExpectedException('\Gitrepos\Exceptions\DuplicateEmail');
@@ -92,7 +98,11 @@ return $app;
         $dbMock = \Mockery::mock();
         $dbMock
             ->shouldReceive('insert')
-            ->andThrow('PDOException', 'SQLSTATE[23000]: Integrity constraint violation: 19 column email is not unique', 23000);
+            ->andThrow(
+            'PDOException',
+            'SQLSTATE[23000]: Integrity constraint violation: 19 column email is not unique',
+            23000
+        );
 
         $app['db'] = $dbMock;
 

@@ -1,5 +1,6 @@
 <?php
 namespace Tests\UnitTests;
+
 class UserRequestMatcherTest extends \PHPUnit_Framework_TestCase
 {
     public function test_matches_allows_login_route()

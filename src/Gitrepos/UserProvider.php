@@ -3,9 +3,9 @@
 namespace Gitrepos;
 
 use \Symfony\Component\Security\Core\User\UserProviderInterface,
-\Symfony\Component\Security\Core\User\UserInterface,
-\Symfony\Component\Security\Core\Exception\UnsupportedUserException,
-\Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+    \Symfony\Component\Security\Core\User\UserInterface,
+    \Symfony\Component\Security\Core\Exception\UnsupportedUserException,
+    \Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
 class UserProvider implements UserProviderInterface
 {
@@ -26,8 +26,7 @@ class UserProvider implements UserProviderInterface
          */
         $stmt = $this->conn->executeQuery('SELECT * FROM users WHERE username = ?', array(strtolower($username)));
 
-        if (!$user = $stmt->fetch())
-        {
+        if (!$user = $stmt->fetch()) {
             throw new UsernameNotFoundException(sprintf('Username "%s" does not exist.', $username));
         }
 
@@ -36,8 +35,7 @@ class UserProvider implements UserProviderInterface
 
     public function refreshUser(UserInterface $user)
     {
-        if (!$user instanceof User)
-        {
+        if (!$user instanceof User) {
             throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', get_class($user)));
         }
 

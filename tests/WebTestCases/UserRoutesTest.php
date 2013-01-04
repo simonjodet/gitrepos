@@ -29,6 +29,7 @@ class UserRoutesTest extends WebTestCase
 
         $this->assertTrue($client->getResponse()->isOk());
     }
+
     public function test_post_register_route_exists()
     {
         $client = $this->createClient();

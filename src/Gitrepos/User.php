@@ -62,13 +62,10 @@ class User implements \Symfony\Component\Security\Core\User\AdvancedUserInterfac
      */
     public function __construct($data = array())
     {
-        if (is_array($data))
-        {
-            foreach ($data as $property => $value)
-            {
+        if (is_array($data)) {
+            foreach ($data as $property => $value) {
                 $setter = 'set' . ucfirst($property);
-                if (method_exists($this, $setter))
-                {
+                if (method_exists($this, $setter)) {
                     $this->$setter($value);
                 }
             }

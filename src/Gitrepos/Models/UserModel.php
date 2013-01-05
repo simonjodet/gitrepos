@@ -4,7 +4,8 @@ namespace Gitrepos\Models;
 
 /**
  * TODO: add created date to create()
-
+ * TODO: generate random salt
+ * TODO: Use https://github.com/ircmaxell/password_compat lib
  */
 class UserModel
 {

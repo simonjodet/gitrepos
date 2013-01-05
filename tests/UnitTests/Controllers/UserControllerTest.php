@@ -20,7 +20,7 @@ class UserControllerTest extends \PHPUnit_Framework_TestCase
         $twigMock
             ->shouldReceive('render')
             ->once()
-            ->with('login.twig', \Mockery::any())
+            ->with('user/login.twig', \Mockery::any())
             ->andReturn('template');
 
         $app = new \Silex\Application();
@@ -61,7 +61,7 @@ class UserControllerTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('render')
             ->once()
             ->with(
-            'signin.twig',
+            'user/signin.twig',
             array('form' => 'form->createView')
         )
             ->andReturn('template');
@@ -168,7 +168,7 @@ class UserControllerTest extends \PHPUnit_Framework_TestCase
         $twigMock
             ->shouldReceive('render')
             ->once()
-            ->with('signin.twig', \Mockery::any())
+            ->with('user/signin.twig', \Mockery::any())
             ->andReturn('template');
 
         $app['twig'] = $twigMock;
@@ -238,7 +238,7 @@ class UserControllerTest extends \PHPUnit_Framework_TestCase
         $twigMock
             ->shouldReceive('render')
             ->once()
-            ->with('signin.twig', \Mockery::any())
+            ->with('user/signin.twig', \Mockery::any())
             ->andReturn('template');
 
         $app['twig'] = $twigMock;
@@ -308,7 +308,7 @@ class UserControllerTest extends \PHPUnit_Framework_TestCase
         $twigMock
             ->shouldReceive('render')
             ->once()
-            ->with('signin.twig', \Mockery::any())
+            ->with('user/signin.twig', \Mockery::any())
             ->andReturn('template');
 
         $app['twig'] = $twigMock;

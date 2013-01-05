@@ -13,7 +13,7 @@ class UserController
     public function loginAction(Request $request, Application $app)
     {
         return $app['twig']->render(
-            'login.twig',
+            'user/login.twig',
             array(
                 'error' => $app['security.last_error']($request),
                 'last_username' => $app['session']->get('_security.last_username'),
@@ -52,7 +52,7 @@ class UserController
             }
         }
 
-        return $app['twig']->render('signin.twig', array('form' => $form->createView()));
+        return $app['twig']->render('user/signin.twig', array('form' => $form->createView()));
     }
 
     public function buildSigninForm($app)

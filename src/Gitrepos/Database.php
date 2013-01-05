@@ -24,6 +24,8 @@ class Database
                 $systemTable->addColumn('system_key', 'string', array('length' => 255));
                 $systemTable->addColumn('value', 'string', array('length' => 255));
                 $systemTable->addUniqueIndex(array('system_key'), 'unique_system_key');
+                $systemTable->setPrimaryKey(array('system_key'));
+
 
                 $usersTable = $Schema->createTable('users');
                 $usersTable->addColumn('username', 'string', array('length' => 64));
@@ -32,6 +34,28 @@ class Database
                 $usersTable->addUniqueIndex(array('username'), 'unique_users_nickname');
                 $usersTable->addUniqueIndex(array('email'), 'unique_users_email');
                 $usersTable->setPrimaryKey(array('username'));
+
+                return $Schema;
+            },
+            2 => function () use ($Schema) {
+                $systemTable = $Schema->createTable('system');
+                $systemTable->addColumn('system_key', 'string', array('length' => 255));
+                $systemTable->addColumn('value', 'string', array('length' => 255));
+                $systemTable->addUniqueIndex(array('system_key'), 'unique_system_key');
+
+                $usersTable = $Schema->createTable('users');
+                $usersTable->addColumn('username', 'string', array('length' => 64));
+                $usersTable->addColumn('email', 'string', array('length' => 255));
+                $usersTable->addColumn('password', 'string', array('length' => 255));
+                $usersTable->addUniqueIndex(array('username'), 'unique_users_nickname');
+                $usersTable->addUniqueIndex(array('email'), 'unique_users_email');
+                $usersTable->setPrimaryKey(array('username'));
+
+                $keysTable = $Schema->createTable('keys');
+                $keysTable->addColumn('id', 'integer', array('unsigned' => true));
+                $keysTable->addColumn('title', 'string', array('length' => 128));
+                $keysTable->addColumn('value', 'string', array('length' => 512));
+                $keysTable->setPrimaryKey(array('id'));
 
                 return $Schema;
             }

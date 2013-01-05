@@ -9,5 +9,6 @@ class ModelFactoryTest extends \PHPUnit_Framework_TestCase
         $app = new \Silex\Application();
         $ModelFactory = new \Gitrepos\Models\ModelFactory($app);
         $this->assertInstanceOf('\Gitrepos\Models\UserModel', $ModelFactory->get('User'));
+        $this->assertInstanceOf('\Gitrepos\Models\KeyModel', $ModelFactory->get('Key'));
     }
 }

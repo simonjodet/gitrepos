@@ -3,7 +3,7 @@
  * Gitrepos User
  * @package Gitrepos
  */
-namespace Gitrepos;
+namespace Gitrepos\Entities;
 
 /**
  * User

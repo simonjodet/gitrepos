@@ -38,7 +38,7 @@ class UserController
             if ($form->isValid()) {
                 $UserModel = $app['model.factory']->get('User');
                 try {
-                    $User = $UserModel->create(new \Gitrepos\User($data));
+                    $User = $UserModel->create(new \Gitrepos\Entities\User($data));
                     $app['security']->setToken(
                         new UsernamePasswordToken($User, $User->getPassword(), 'user_firewall', array('ROLE_USER'))
                     );

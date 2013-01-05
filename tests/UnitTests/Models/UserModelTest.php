@@ -48,7 +48,7 @@ class UserModelTest extends \PHPUnit_Framework_TestCase
         $app['db'] = $dbMock;
 
         $UserModel = new \Gitrepos\Models\UserModel($app);
-        $User = new \Gitrepos\User(array(
+        $User = new \Gitrepos\Entities\User(array(
             'username' => 'simon',
             'email' => 'email@domain.com',
             'password' => 'encoded pwd'
@@ -79,7 +79,7 @@ class UserModelTest extends \PHPUnit_Framework_TestCase
         $app['db'] = $dbMock;
 
         $UserModel = new \Gitrepos\Models\UserModel($app);
-        $User = new \Gitrepos\User(array(
+        $User = new \Gitrepos\Entities\User(array(
             'username' => 'simon',
             'email' => 'email@domain.com',
             'password' => 'encoded pwd'
@@ -107,7 +107,7 @@ class UserModelTest extends \PHPUnit_Framework_TestCase
         $app['db'] = $dbMock;
 
         $UserModel = new \Gitrepos\Models\UserModel($app);
-        $User = new \Gitrepos\User(array(
+        $User = new \Gitrepos\Entities\User(array(
             'username' => 'simon',
             'email' => 'email@domain.com',
             'password' => 'encoded pwd'

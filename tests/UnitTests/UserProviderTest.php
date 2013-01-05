@@ -19,7 +19,7 @@ class UserProviderTest extends \PHPUnit_Framework_TestCase
 
 
         $this->assertInstanceOf(
-            '\Gitrepos\User',
+            '\Gitrepos\Entities\User',
             $UserProvider->loadUserByUsername('username')
         );
     }
@@ -47,7 +47,7 @@ class UserProviderTest extends \PHPUnit_Framework_TestCase
 
     public function test_refreshUser_calls_loadUserByUsername_correctly()
     {
-        $User = new \Gitrepos\User(array('username' => 'username'));
+        $User = new \Gitrepos\Entities\User(array('username' => 'username'));
 
         $app = new \Silex\Application();
 

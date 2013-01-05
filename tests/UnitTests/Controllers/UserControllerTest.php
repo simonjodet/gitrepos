@@ -97,7 +97,7 @@ class UserControllerTest extends \PHPUnit_Framework_TestCase
         $UserModelMock
             ->shouldReceive('create')
             ->once()
-            ->with(\Mockery::type('\Gitrepos\User'))
+            ->with(\Mockery::type('\Gitrepos\Entities\User'))
             ->andReturn(\Mockery::mock(array('getPassword' => null)));
 
         $SecurityMock = \Mockery::mock();
@@ -222,7 +222,7 @@ class UserControllerTest extends \PHPUnit_Framework_TestCase
         $UserModelMock
             ->shouldReceive('create')
             ->once()
-            ->with(\Mockery::type('\Gitrepos\User'))
+            ->with(\Mockery::type('\Gitrepos\Entities\User'))
             ->andThrow(new \Gitrepos\Exceptions\DuplicateUsername);
 
         $ModelFactoryMock = \Mockery::mock();
@@ -292,7 +292,7 @@ class UserControllerTest extends \PHPUnit_Framework_TestCase
         $UserModelMock
             ->shouldReceive('create')
             ->once()
-            ->with(\Mockery::type('\Gitrepos\User'))
+            ->with(\Mockery::type('\Gitrepos\Entities\User'))
             ->andThrow(new \Gitrepos\Exceptions\DuplicateEmail);
 
         $ModelFactoryMock = \Mockery::mock();

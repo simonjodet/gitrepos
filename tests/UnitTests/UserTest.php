@@ -12,7 +12,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
             'password' => 'pa$$word'
         );
 
-        $User = new \Gitrepos\User($UserData);
+        $User = new \Gitrepos\Entities\User($UserData);
 
         $this->assertEquals(42, $User->getId());
         $this->assertEquals('simon', $User->getUsername());
@@ -29,7 +29,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
             'password' => 'pa$$word'
         );
 
-        $User = new \Gitrepos\User($UserData);
+        $User = new \Gitrepos\Entities\User($UserData);
 
         $this->assertEquals(42, $User->getId());
         $this->assertEquals('email@domain.com', $User->getEmail());
@@ -40,15 +40,15 @@ class UserTest extends \PHPUnit_Framework_TestCase
     {
         $UserData = 'string';
 
-        $User = new \Gitrepos\User($UserData);
+        $User = new \Gitrepos\Entities\User($UserData);
 
-        $this->assertInstanceOf('\Gitrepos\User', $User);
+        $this->assertInstanceOf('\Gitrepos\Entities\User', $User);
     }
 
     public function test_constructor_data_parameter_is_optional()
     {
-        $User = new \Gitrepos\User();
+        $User = new \Gitrepos\Entities\User();
 
-        $this->assertInstanceOf('\Gitrepos\User', $User);
+        $this->assertInstanceOf('\Gitrepos\Entities\User', $User);
     }
 }

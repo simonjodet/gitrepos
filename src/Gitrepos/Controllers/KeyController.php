@@ -14,6 +14,31 @@ class KeyController
         /**
          * @var $form \Symfony\Component\Form\Form
          */
+        $form = $this->buildAddForm($app);
+
+        if ($app['request']->getMethod() == 'POST') {
+            $form->bind($app['request']);
+            if ($form->isValid()) {
+                //Add key
+                $data = $form->getData();
+                $KeyModel = $app['model.factory']->get('Key');
+
+                $Key = new \Gitrepos\Entities\Key();
+                $Key->title = $data['title'];
+                $Key->value = $data['value'];
+
+                $KeyModel->add($Key);
+            }
+        }
+
+        return $app['twig']->render('key/add.twig', array('form' => $form->createView()));
+    }
+
+    public function buildAddForm(Application $app)
+    {
+        /**
+         * @var $form \Symfony\Component\Form\Form
+         */
         $form = $app['form.factory']->createBuilder('form')
             ->add(
             'title',
@@ -36,6 +61,6 @@ class KeyController
             )
         )
             ->getForm();
-        return $app['twig']->render('key/add.twig', array('form' => $form->createView()));
+        return $form;
     }
 }

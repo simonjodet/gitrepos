@@ -23,9 +23,7 @@ class KeyController
                 $data = $form->getData();
                 $KeyModel = $app['model.factory']->get('Key');
 
-                $Key = new \Gitrepos\Entities\Key();
-                $Key->title = $data['title'];
-                $Key->value = $data['value'];
+                $Key = new \Gitrepos\Entities\Key($data);
 
                 $KeyModel->add($Key);
             }

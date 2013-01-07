@@ -22,19 +22,20 @@ class KeyModelTest extends \PHPUnit_Framework_TestCase
         $dbMock
             ->shouldReceive('insert')
             ->with(
-            'keys',
-            array(
-                'title' => 'key_title',
-                'value' => 'key_value'
+                'keys',
+                array(
+                    'title' => 'key_title',
+                    'value' => 'key_value'
+                )
             )
-        )
             ->once();
 
         $app['db'] = $dbMock;
 
-        $Key = new \Gitrepos\Entities\Key();
-        $Key->title = 'key_title';
-        $Key->value = 'key_value';
+        $Key = new \Gitrepos\Entities\Key(array(
+            'title' => 'key_title',
+            'value' => 'key_value'
+        ));
 
         $KeyModel = new \Gitrepos\Models\KeyModel($app);
         $KeyModel->add($Key);

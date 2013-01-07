@@ -36,29 +36,29 @@ class KeyControllerTest extends \PHPUnit_Framework_TestCase
         $formFactoryMock
             ->shouldReceive('createBuilder->add')
             ->with(
-            'title',
-            'text',
-            array(
-                'constraints' => array(
-                    new \Symfony\Component\Validator\Constraints\MinLength(1),
-                    new \Symfony\Component\Validator\Constraints\MaxLength(128)
+                'title',
+                'text',
+                array(
+                    'constraints' => array(
+                        new \Symfony\Component\Validator\Constraints\MinLength(1),
+                        new \Symfony\Component\Validator\Constraints\MaxLength(128)
+                    )
                 )
             )
-        )
             ->once()
             ->andReturn($formFactoryMock);
         $formFactoryMock
             ->shouldReceive('createBuilder->add')
             ->with(
-            'key',
-            'text',
-            array(
-                'constraints' => array(
-                    new \Symfony\Component\Validator\Constraints\MinLength(1),
-                    new \Symfony\Component\Validator\Constraints\MaxLength(512)
+                'key',
+                'text',
+                array(
+                    'constraints' => array(
+                        new \Symfony\Component\Validator\Constraints\MinLength(1),
+                        new \Symfony\Component\Validator\Constraints\MaxLength(512)
+                    )
                 )
             )
-        )
             ->once()
             ->andReturn($formFactoryMock);
         $app['form.factory'] = $formFactoryMock;
@@ -93,9 +93,9 @@ class KeyControllerTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('render')
             ->once()
             ->with(
-            'key/add.twig',
-            array('form' => 'form->createView')
-        )
+                'key/add.twig',
+                array('form' => 'form->createView')
+            )
             ->andReturn('template');
         $app['twig'] = $twigMock;
 
@@ -128,9 +128,9 @@ class KeyControllerTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('render')
             ->once()
             ->with(
-            'key/add.twig',
-            array('form' => 'form->createView')
-        )
+                'key/add.twig',
+                array('form' => 'form->createView')
+            )
             ->andReturn('template');
         $app['twig'] = $twigMock;
 
@@ -152,26 +152,27 @@ class KeyControllerTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('getData')
             ->once()
             ->andReturn(
-            array(
-                'title' => 'key_title',
-                'value' => 'key_value'
-            )
-        );
+                array(
+                    'title' => 'key_title',
+                    'value' => 'key_value'
+                )
+            );
 
         $KeyModelMock = \Mockery::mock('\Gitrepos\KeyModel');
         $KeyModelMock
             ->shouldReceive('add')
             ->with(
-            \Mockery::on(
-                function ($arg) {
-                    $Key = new \Gitrepos\Entities\Key();
-                    $Key->title = 'key_title';
-                    $Key->value = 'key_value';
+                \Mockery::on(
+                    function ($arg) {
+                        $Key = new \Gitrepos\Entities\Key(array(
+                            'title' => 'key_title',
+                            'value' => 'key_value'
+                        ));
 
-                    return $arg == $Key;
-                }
+                        return $arg == $Key;
+                    }
+                )
             )
-        )
             ->once();
 
         $ModelFactoryMock = \Mockery::mock();
@@ -188,9 +189,9 @@ class KeyControllerTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('render')
             ->once()
             ->with(
-            'key/add.twig',
-            array('form' => 'form->createView')
-        )
+                'key/add.twig',
+                array('form' => 'form->createView')
+            )
             ->andReturn('template');
         $app['twig'] = $twigMock;
 

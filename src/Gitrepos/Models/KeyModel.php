@@ -16,8 +16,8 @@ class KeyModel
             $this->app['db']->insert(
                 'keys',
                 array(
-                    'title' => $Key->title,
-                    'value' => $Key->value
+                    'title' => $Key->getTitle(),
+                    'value' => $Key->getValue()
                 )
             );
     }

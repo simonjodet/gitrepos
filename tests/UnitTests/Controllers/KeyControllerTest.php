@@ -198,4 +198,9 @@ class KeyControllerTest extends \PHPUnit_Framework_TestCase
         $KeyController = $this->get_KeyController_with_mocked_buildAddForm($app, $FormMock);
         $KeyController->addAction($this->requestMock, $app);
     }
+
+    public function test_listAction_returns_data_from_model_to_view()
+    {
+
+    }
 }

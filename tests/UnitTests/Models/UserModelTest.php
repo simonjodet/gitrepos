@@ -32,13 +32,13 @@ class UserModelTest extends \PHPUnit_Framework_TestCase
         $dbMock
             ->shouldReceive('insert')
             ->with(
-            'users',
-            array(
-                'username' => 'simon',
-                'email' => 'email@domain.com',
-                'password' => 'encoded pwd'
+                'users',
+                array(
+                    'username' => 'simon',
+                    'email' => 'email@domain.com',
+                    'password' => 'encoded pwd'
+                )
             )
-        )
             ->once();
 
         $dbMock
@@ -71,10 +71,10 @@ class UserModelTest extends \PHPUnit_Framework_TestCase
         $dbMock
             ->shouldReceive('insert')
             ->andThrow(
-            'PDOException',
-            'SQLSTATE[23000]: Integrity constraint violation: 19 column username is not unique',
-            23000
-        );
+                'PDOException',
+                'SQLSTATE[23000]: Integrity constraint violation: 19 column username is not unique',
+                23000
+            );
 
         $app['db'] = $dbMock;
 
@@ -99,10 +99,10 @@ class UserModelTest extends \PHPUnit_Framework_TestCase
         $dbMock
             ->shouldReceive('insert')
             ->andThrow(
-            'PDOException',
-            'SQLSTATE[23000]: Integrity constraint violation: 19 column email is not unique',
-            23000
-        );
+                'PDOException',
+                'SQLSTATE[23000]: Integrity constraint violation: 19 column email is not unique',
+                23000
+            );
 
         $app['db'] = $dbMock;
 

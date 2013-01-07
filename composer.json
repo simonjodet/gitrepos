@@ -1,28 +1,28 @@
 {
-    "require":{
-        "silex/silex":"1.0.*@dev",
-        "symfony/security":"2.1.*",
-        "symfony/twig-bridge":"2.1.*",
-        "twig/twig":"1.10.*",
-        "symfony/form":"2.1.*",
-        "symfony/validator":"2.1.*",
-        "symfony/config":"2.1.*",
-        "symfony/translation":"2.1.*",
-        "symfony/locale":"2.1.*",
-        "doctrine/dbal":"2.1.*",
-        "monolog/monolog":">=1.0.0",
-        "jaz303/phake":"dev-master"
+    "require": {
+        "silex/silex": "1.0.*@dev",
+        "symfony/security": "2.1.*",
+        "symfony/twig-bridge": "2.1.*",
+        "twig/twig": "1.10.*",
+        "symfony/form": "2.1.*",
+        "symfony/validator": "2.1.*",
+        "symfony/config": "2.1.*",
+        "symfony/translation": "2.1.*",
+        "symfony/locale": "2.1.*",
+        "doctrine/dbal": "2.1.*",
+        "monolog/monolog": ">=1.0.0",
+        "jaz303/phake": "dev-master"
     },
-    "require-dev":{
-        "mockery/mockery":"dev-master",
-        "symfony/browser-kit":"2.1.*",
-        "symfony/process":"2.1.*",
-        "symfony/css-selector":"2.1.*"
+    "require-dev": {
+        "mockery/mockery": "dev-master",
+        "symfony/browser-kit": "2.1.*",
+        "symfony/process": "2.1.*",
+        "symfony/css-selector": "2.1.*"
     },
-    "autoload":{
-        "psr-0":{
-            "Gitrepos":"src/",
-            "":""
+    "autoload": {
+        "psr-0": {
+            "Gitrepos": "src/",
+            "": ""
         }
     }
 }

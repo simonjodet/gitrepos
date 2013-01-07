@@ -62,43 +62,43 @@ class UserController
          */
         $form = $app['form.factory']->createBuilder('form')
             ->add(
-            'username',
-            'text',
-            array(
-                'constraints' => array(
-                    new Assert\MinLength(3),
-                    new Assert\MaxLength(64)
+                'username',
+                'text',
+                array(
+                    'constraints' => array(
+                        new Assert\MinLength(3),
+                        new Assert\MaxLength(64)
+                    )
                 )
             )
-        )
             ->add(
-            'email',
-            'text',
-            array(
-                'constraints' => array(
-                    new Assert\Email()
+                'email',
+                'text',
+                array(
+                    'constraints' => array(
+                        new Assert\Email()
+                    )
                 )
             )
-        )
             ->add(
-            'password',
-            'password',
-            array(
-                'always_empty' => false,
-                'constraints' => array(
-                    new Assert\MinLength(6),
-                    new Assert\MaxLength(128)
+                'password',
+                'password',
+                array(
+                    'always_empty' => false,
+                    'constraints' => array(
+                        new Assert\MinLength(6),
+                        new Assert\MaxLength(128)
+                    )
                 )
             )
-        )
             ->add(
-            'password2',
-            'password',
-            array(
-                'label' => 'Retype password',
-                'always_empty' => false
+                'password2',
+                'password',
+                array(
+                    'label' => 'Retype password',
+                    'always_empty' => false
+                )
             )
-        )
             ->getForm();
 
         return $form;

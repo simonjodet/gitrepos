@@ -32,6 +32,11 @@ class KeyController
         return $app['twig']->render('key/add.twig', array('form' => $form->createView()));
     }
 
+    public function listAction(Request $request, Application $app)
+    {
+        ;
+    }
+
     public function buildAddForm(Application $app)
     {
         /**
@@ -39,25 +44,25 @@ class KeyController
          */
         $form = $app['form.factory']->createBuilder('form')
             ->add(
-            'title',
-            'text',
-            array(
-                'constraints' => array(
-                    new Assert\MinLength(1),
-                    new Assert\MaxLength(128)
+                'title',
+                'text',
+                array(
+                    'constraints' => array(
+                        new Assert\MinLength(1),
+                        new Assert\MaxLength(128)
+                    )
                 )
             )
-        )
             ->add(
-            'key',
-            'text',
-            array(
-                'constraints' => array(
-                    new Assert\MinLength(1),
-                    new Assert\MaxLength(512)
+                'key',
+                'text',
+                array(
+                    'constraints' => array(
+                        new Assert\MinLength(1),
+                        new Assert\MaxLength(512)
+                    )
                 )
             )
-        )
             ->getForm();
         return $form;
     }

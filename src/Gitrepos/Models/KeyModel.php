@@ -13,12 +13,12 @@ class KeyModel
 
     public function add(\Gitrepos\Entities\Key $Key)
     {
-            $this->app['db']->insert(
-                'keys',
-                array(
-                    'title' => $Key->getTitle(),
-                    'value' => $Key->getValue()
-                )
-            );
+        $this->app['db']->insert(
+            'keys',
+            array(
+                'title' => $Key->getTitle(),
+                'value' => $Key->getValue()
+            )
+        );
     }
 }

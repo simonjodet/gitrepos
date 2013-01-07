@@ -61,9 +61,9 @@ class UserControllerTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('render')
             ->once()
             ->with(
-            'user/signin.twig',
-            array('form' => 'form->createView')
-        )
+                'user/signin.twig',
+                array('form' => 'form->createView')
+            )
             ->andReturn('template');
         $app['twig'] = $twigMock;
 
@@ -82,11 +82,11 @@ class UserControllerTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('getData')
             ->once()
             ->andReturn(
-            array(
-                'password' => 'my_password',
-                'password2' => 'my_password'
-            )
-        );
+                array(
+                    'password' => 'my_password',
+                    'password2' => 'my_password'
+                )
+            );
 
         $this->requestMock
             ->shouldReceive('getMethod')
@@ -134,11 +134,11 @@ class UserControllerTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('getData')
             ->once()
             ->andReturn(
-            array(
-                'password' => 'my_password',
-                'password2' => 'not-the_same_password'
-            )
-        );
+                array(
+                    'password' => 'my_password',
+                    'password2' => 'not-the_same_password'
+                )
+            );
 
 
         $FieldMock = \Mockery::mock();
@@ -146,13 +146,13 @@ class UserControllerTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('addError')
             ->once()
             ->with(
-            \Mockery::on(
-                function ($FormError) {
-                    return $FormError instanceof \Symfony\Component\Form\FormError && $FormError->getMessage(
-                    ) == 'The two password fields don\'t match.';
-                }
-            )
-        );
+                \Mockery::on(
+                    function ($FormError) {
+                        return $FormError instanceof \Symfony\Component\Form\FormError && $FormError->getMessage(
+                        ) == 'The two password fields don\'t match.';
+                    }
+                )
+            );
 
         $FormMock
             ->shouldReceive('get')
@@ -188,24 +188,24 @@ class UserControllerTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('getData')
             ->once()
             ->andReturn(
-            array(
-                'password' => 'my_password',
-                'password2' => 'my_password'
-            )
-        );
+                array(
+                    'password' => 'my_password',
+                    'password2' => 'my_password'
+                )
+            );
 
         $FieldMock = \Mockery::mock();
         $FieldMock
             ->shouldReceive('addError')
             ->once()
             ->with(
-            \Mockery::on(
-                function ($FormError) {
-                    return $FormError instanceof \Symfony\Component\Form\FormError && $FormError->getMessage(
-                    ) == 'This username is already used.';
-                }
-            )
-        );
+                \Mockery::on(
+                    function ($FormError) {
+                        return $FormError instanceof \Symfony\Component\Form\FormError && $FormError->getMessage(
+                        ) == 'This username is already used.';
+                    }
+                )
+            );
 
         $FormMock
             ->shouldReceive('get')
@@ -258,24 +258,24 @@ class UserControllerTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('getData')
             ->once()
             ->andReturn(
-            array(
-                'password' => 'my_password',
-                'password2' => 'my_password'
-            )
-        );
+                array(
+                    'password' => 'my_password',
+                    'password2' => 'my_password'
+                )
+            );
 
         $FieldMock = \Mockery::mock();
         $FieldMock
             ->shouldReceive('addError')
             ->once()
             ->with(
-            \Mockery::on(
-                function ($FormError) {
-                    return $FormError instanceof \Symfony\Component\Form\FormError && $FormError->getMessage(
-                    ) == 'This email address is already used.';
-                }
-            )
-        );
+                \Mockery::on(
+                    function ($FormError) {
+                        return $FormError instanceof \Symfony\Component\Form\FormError && $FormError->getMessage(
+                        ) == 'This email address is already used.';
+                    }
+                )
+            );
 
         $FormMock
             ->shouldReceive('get')
@@ -326,55 +326,55 @@ class UserControllerTest extends \PHPUnit_Framework_TestCase
         $formFactoryMock
             ->shouldReceive('createBuilder->add')
             ->with(
-            'username',
-            'text',
-            array(
-                'constraints' => array(
-                    new \Symfony\Component\Validator\Constraints\MinLength(3),
-                    new \Symfony\Component\Validator\Constraints\MaxLength(64)
+                'username',
+                'text',
+                array(
+                    'constraints' => array(
+                        new \Symfony\Component\Validator\Constraints\MinLength(3),
+                        new \Symfony\Component\Validator\Constraints\MaxLength(64)
+                    )
                 )
             )
-        )
             ->once()
             ->andReturn($formFactoryMock);
         $formFactoryMock
             ->shouldReceive('createBuilder->add')
             ->with(
-            'email',
-            'text',
-            array(
-                'constraints' => array(
-                    new \Symfony\Component\Validator\Constraints\Email()
+                'email',
+                'text',
+                array(
+                    'constraints' => array(
+                        new \Symfony\Component\Validator\Constraints\Email()
+                    )
                 )
             )
-        )
             ->once()
             ->andReturn($formFactoryMock);
         $formFactoryMock
             ->shouldReceive('createBuilder->add')
             ->with(
-            'password',
-            'password',
-            array(
-                'always_empty' => false,
-                'constraints' => array(
-                    new \Symfony\Component\Validator\Constraints\MinLength(6),
-                    new \Symfony\Component\Validator\Constraints\MaxLength(128)
+                'password',
+                'password',
+                array(
+                    'always_empty' => false,
+                    'constraints' => array(
+                        new \Symfony\Component\Validator\Constraints\MinLength(6),
+                        new \Symfony\Component\Validator\Constraints\MaxLength(128)
+                    )
                 )
             )
-        )
             ->once()
             ->andReturn($formFactoryMock);
         $formFactoryMock
             ->shouldReceive('createBuilder->add')
             ->with(
-            'password2',
-            'password',
-            array(
-                'label' => 'Retype password',
-                'always_empty' => false
+                'password2',
+                'password',
+                array(
+                    'label' => 'Retype password',
+                    'always_empty' => false
+                )
             )
-        )
             ->once()
             ->andReturn($formFactoryMock);
         $app['form.factory'] = $formFactoryMock;

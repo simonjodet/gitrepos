@@ -50,7 +50,7 @@ class KeyControllerTest extends \PHPUnit_Framework_TestCase
         $formFactoryMock
             ->shouldReceive('createBuilder->add')
             ->with(
-                'key',
+                'value',
                 'text',
                 array(
                     'constraints' => array(
@@ -154,9 +154,18 @@ class KeyControllerTest extends \PHPUnit_Framework_TestCase
             ->andReturn(
                 array(
                     'title' => 'key_title',
-                    'value' => 'key_value'
+                    'value' => 'key_value',
+                    'user_id' => '1'
                 )
             );
+
+        $SecurityContextMock = \Mockery::mock();
+        $SecurityContextMock
+            ->shouldReceive('getToken->getUser->getId')
+            ->once()
+            ->andReturn(1);
+
+        $app['security'] = $SecurityContextMock;
 
         $KeyModelMock = \Mockery::mock('\Gitrepos\KeyModel');
         $KeyModelMock
@@ -166,7 +175,8 @@ class KeyControllerTest extends \PHPUnit_Framework_TestCase
                     function ($arg) {
                         $Key = new \Gitrepos\Entities\Key(array(
                             'title' => 'key_title',
-                            'value' => 'key_value'
+                            'value' => 'key_value',
+                            'user_id' => '1'
                         ));
 
                         return $arg == $Key;
@@ -199,8 +209,59 @@ class KeyControllerTest extends \PHPUnit_Framework_TestCase
         $KeyController->addAction($this->requestMock, $app);
     }
 
-    public function test_listAction_returns_data_from_model_to_view()
+    public function xtest_listAction_passes_data_from_model_to_view()
     {
+        $app = new \Silex\Application();
+        $SecurityContextMock = \Mockery::mock();
+        $SecurityContextMock
+            ->shouldReceive('getToken->getUser->getId')
+            ->once()
+            ->andReturn(1);
+
+        $app['security'] = $SecurityContextMock;
+
+        $KeyModelMock = \Mockery::mock('\Gitrepos\KeyModel');
+        $KeyModelMock
+            ->shouldReceive('list')
+            ->with()
+            ->once()
+            ->andReturn(
+                array(
+                    'key1',
+                    'key2'
+                )
+            );
+
+        $ModelFactoryMock = \Mockery::mock();
+        $ModelFactoryMock
+            ->shouldReceive('get')
+            ->with('Key')
+            ->once()
+            ->andReturn($KeyModelMock);
+
+        $app['model.factory'] = $ModelFactoryMock;
+
+        $twigMock = \Mockery::mock();
+        $twigMock
+            ->shouldReceive('render')
+            ->once()
+            ->with(
+                'key/list.twig',
+                array(
+                    'keys' => array(
+                        'key1',
+                        'key2'
+                    )
+                )
+            )
+            ->andReturn('template');
+
+        $app['twig'] = $twigMock;
+
+        $RequestMock = \Mockery::mock('\Symfony\Component\HttpFoundation\Request');
+
+        $KeyController = new \Gitrepos\Controllers\KeyController();
+        $this->assertEquals('template', $KeyController->listAction($RequestMock, $app));
 
     }
 }

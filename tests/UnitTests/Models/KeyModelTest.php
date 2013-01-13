@@ -25,7 +25,8 @@ class KeyModelTest extends \PHPUnit_Framework_TestCase
                 'keys',
                 array(
                     'title' => 'key_title',
-                    'value' => 'key_value'
+                    'value' => 'key_value',
+                    'user_id' => '1'
                 )
             )
             ->once();
@@ -34,11 +35,37 @@ class KeyModelTest extends \PHPUnit_Framework_TestCase
 
         $Key = new \Gitrepos\Entities\Key(array(
             'title' => 'key_title',
-            'value' => 'key_value'
+            'value' => 'key_value',
+            'user_id' => '1'
         ));
 
         $KeyModel = new \Gitrepos\Models\KeyModel($app);
         $KeyModel->add($Key);
+    }
 
+    public function test_enumerate_retrieves_the_user_keys()
+    {
+        $app = new \Silex\Application();
+
+        $statementMock = \Mockery::mock();
+        $statementMock
+            ->shouldReceive('bindValue')
+            ->with('user_id', 42)
+            ->once();
+
+        $statementMock
+            ->shouldReceive('execute')
+            ->once();
+
+        $dbMock = \Mockery::mock();
+        $dbMock
+            ->shouldReceive('prepare')
+            ->with('SELECT * FROM keys WHERE user_id = :user_id')
+            ->once()
+            ->andReturn($statementMock);
+
+        $app['db'] = $dbMock;
+        $KeyModel = new \Gitrepos\Models\KeyModel($app);
+        $KeyModel->enumerate(42);
     }
 }

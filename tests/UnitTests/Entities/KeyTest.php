@@ -7,11 +7,13 @@ class KeyTest extends \PHPUnit_Framework_TestCase
     {
         $data = array(
             'title' => 'some title',
-            'value' => 'some value'
+            'value' => 'some value',
+            'user_id' => '1'
         );
         $Key = new \Gitrepos\Entities\Key($data);
         $this->assertEquals('some title', $Key->getTitle());
         $this->assertEquals('some value', $Key->getValue());
+        $this->assertEquals('1', $Key->getUserId());
     }
 
     public function test_Key_constructor_throws_exception_if_title_is_missing()
@@ -76,6 +78,27 @@ class KeyTest extends \PHPUnit_Framework_TestCase
         $data = array(
             'title' => 'some title',
             'value' => $long_value
+        );
+        new \Gitrepos\Entities\Key($data);
+    }
+
+    public function test_Key_constructor_throws_exception_if_user_id_is_missing()
+    {
+        $this->setExpectedException('\Gitrepos\Exceptions\InvalidKey', 'Missing key\'s user id');
+        $data = array(
+            'title' => 'some title',
+            'value' => 'some value'
+        );
+        new \Gitrepos\Entities\Key($data);
+    }
+
+    public function test_Key_constructor_throws_exception_if_user_id_is_empty()
+    {
+        $this->setExpectedException('\Gitrepos\Exceptions\InvalidKey', 'Empty key\'s user id');
+        $data = array(
+            'title' => 'some title',
+            'value' => 'some value',
+            'user_id' => 0
         );
         new \Gitrepos\Entities\Key($data);
     }

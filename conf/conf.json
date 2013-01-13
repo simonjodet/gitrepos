@@ -6,7 +6,7 @@
         "form.secret": "lk<qsfdq<s4d2q4sddf5y4(§4uè43(5§4(§35(4",
         "translation.locale_fallback": "en",
         "db.driver": "pdo_sqlite",
-        "db.path": "/tmp/gitrepos.db",
+        "db.path": "db/gitrepos.db",
         "monolog.logfile": "/tmp/gitrepos.log",
         "monolog.level": "DEBUG"
     },

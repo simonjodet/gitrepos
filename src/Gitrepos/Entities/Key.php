@@ -6,6 +6,7 @@ class Key
 {
     private $title;
     private $value;
+    private $userId;
 
     public function getTitle()
     {
@@ -16,6 +17,12 @@ class Key
     {
         return $this->value;
     }
+
+    public function getUserId()
+    {
+        return $this->userId;
+    }
+
 
     public function __construct($data = array())
     {
@@ -37,7 +44,14 @@ class Key
         if (strlen($data['value']) > 512) {
             throw new \Gitrepos\Exceptions\InvalidKey('Key value too long');
         }
+        if (!isset($data['user_id'])) {
+            throw new \Gitrepos\Exceptions\InvalidKey('Missing key\'s user id');
+        }
+        if (empty($data['user_id'])) {
+            throw new \Gitrepos\Exceptions\InvalidKey('Empty key\'s user id');
+        }
         $this->title = $data['title'];
         $this->value = $data['value'];
+        $this->userId = $data['user_id'];
     }
 }

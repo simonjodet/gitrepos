@@ -19,8 +19,8 @@ class KeyController
         if ($app['request']->getMethod() == 'POST') {
             $form->bind($app['request']);
             if ($form->isValid()) {
-                //Add key
                 $data = $form->getData();
+                $data['user_id'] = $app['security']->getToken()->getUser()->getId();
                 $KeyModel = $app['model.factory']->get('Key');
 
                 $Key = new \Gitrepos\Entities\Key($data);
@@ -34,7 +34,13 @@ class KeyController
 
     public function listAction(Request $request, Application $app)
     {
-        ;
+        /** @var $KeyModel \Gitrepos\Models\KeyModel */
+        $KeyModel = $app['model.factory']->get('Key');
+
+        $userId = $app['security']->getToken()->getUser()->getId();
+
+        $keys = $KeyModel->enumerate($userId);
+        return $app['twig']->render('key/list.twig', array('keys' => $keys));
     }
 
     public function buildAddForm(Application $app)
@@ -54,7 +60,7 @@ class KeyController
                 )
             )
             ->add(
-                'key',
+                'value',
                 'text',
                 array(
                     'constraints' => array(

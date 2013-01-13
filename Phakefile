@@ -35,6 +35,14 @@ group(
                 $app = $phake['app'];
                 $Database = new \Gitrepos\Database($app);
                 $Database->reset();
+                $app['db']->insert(
+                    'users',
+                    array(
+                        'username' => 'simon',
+                        'email' => 'simon@jodet.com',
+                        'password' => 'EO6ukehUbgaBh98IExJmqlIUShu2rh8yU7kaOgAH3bcvMcRw7nCmA9AghmJT1o20Z+/DvKkxx9yQtJoOLdtIeg=='
+                    )
+                );
             }
         );
     }

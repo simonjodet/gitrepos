@@ -16,6 +16,7 @@ $app->match('/signin', $controller . '::signinAction')->method('GET|POST');
 //user-related routes
 $controller = '\Gitrepos\Controllers\KeyController';
 $app->match('/key/add', $controller . '::addAction')->method('GET|POST');
+$app->get('/keys', $controller . '::listAction');
 
 //repository-related routes
 $app->match(

@@ -62,6 +62,6 @@ class KeyCreationTest extends WebTestCase
         $this->loginUser();
         $this->crawler = $this->client->request('GET', '/key/add');
         $this->assertEquals(1, $this->crawler->filter('input[name="form[title]"]')->count());
-        $this->assertEquals(1, $this->crawler->filter('input[name="form[key]"]')->count());
+        $this->assertEquals(1, $this->crawler->filter('input[name="form[value]"]')->count());
     }
 }

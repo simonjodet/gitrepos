@@ -16,7 +16,7 @@ class KeyTest extends \PHPUnit_Framework_TestCase
 
     public function test_Key_constructor_throws_exception_if_title_is_missing()
     {
-        $this->setExpectedException('\Gitrepos\Exceptions\MissingKeyTitle');
+        $this->setExpectedException('\Gitrepos\Exceptions\InvalidKey', 'Missing key title');
         $data = array(
             'value' => 'some value'
         );
@@ -25,7 +25,7 @@ class KeyTest extends \PHPUnit_Framework_TestCase
 
     public function test_Key_constructor_throws_exception_if_title_is_empty()
     {
-        $this->setExpectedException('\Gitrepos\Exceptions\EmptyKeyTitle');
+        $this->setExpectedException('\Gitrepos\Exceptions\InvalidKey', 'Empty key title');
         $data = array(
             'title' => '',
             'value' => 'some value'
@@ -35,7 +35,7 @@ class KeyTest extends \PHPUnit_Framework_TestCase
 
     public function test_Key_constructor_throws_exception_if_title_is_too_long()
     {
-        $this->setExpectedException('\Gitrepos\Exceptions\KeyTitleTooLong');
+        $this->setExpectedException('\Gitrepos\Exceptions\InvalidKey', 'Key title too long');
         $long_title = '';
         for ($i = 0; $i < 129; $i++) {
             $long_title .= '.';
@@ -49,7 +49,7 @@ class KeyTest extends \PHPUnit_Framework_TestCase
 
     public function test_Key_constructor_throws_exception_if_value_is_missing()
     {
-        $this->setExpectedException('\Gitrepos\Exceptions\MissingKeyValue');
+        $this->setExpectedException('\Gitrepos\Exceptions\InvalidKey', 'Missing key value');
         $data = array(
             'title' => 'some title'
         );
@@ -58,7 +58,7 @@ class KeyTest extends \PHPUnit_Framework_TestCase
 
     public function test_Key_constructor_throws_exception_if_value_is_empty()
     {
-        $this->setExpectedException('\Gitrepos\Exceptions\EmptyKeyValue');
+        $this->setExpectedException('\Gitrepos\Exceptions\InvalidKey', 'Empty key value');
         $data = array(
             'title' => 'some title',
             'value' => ''
@@ -68,7 +68,7 @@ class KeyTest extends \PHPUnit_Framework_TestCase
 
     public function test_Key_constructor_throws_exception_if_value_is_too_long()
     {
-        $this->setExpectedException('\Gitrepos\Exceptions\KeyValueTooLong');
+        $this->setExpectedException('\Gitrepos\Exceptions\InvalidKey', 'Key value too long');
         $long_value = '';
         for ($i = 0; $i < 513; $i++) {
             $long_value .= '.';

@@ -2,6 +2,6 @@
 
 namespace Gitrepos\Exceptions;
 
-class KeyTitleTooLong extends \Exception
+class InvalidKey extends \Exception
 {
 }

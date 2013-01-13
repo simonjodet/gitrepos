@@ -57,6 +57,11 @@ class KeyModelTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('execute')
             ->once();
 
+        $statementMock
+            ->shouldReceive('fetchAll')
+            ->once()
+            ->andReturn(array('key1', 'key2'));
+
         $dbMock = \Mockery::mock();
         $dbMock
             ->shouldReceive('prepare')
@@ -66,6 +71,6 @@ class KeyModelTest extends \PHPUnit_Framework_TestCase
 
         $app['db'] = $dbMock;
         $KeyModel = new \Gitrepos\Models\KeyModel($app);
-        $KeyModel->enumerate(42);
+        $this->assertEquals(array('key1', 'key2'), $KeyModel->enumerate(42));
     }
 }

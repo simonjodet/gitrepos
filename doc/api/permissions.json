@@ -1,0 +1,187 @@
+[
+	{
+		"name":"List permissions",
+		"description":"List the given repository's permissions",
+		"url":"/v1/permissions/:owner_name/:repo_name",
+		"method":"GET",
+		"url_params":null,
+		"header_params":{
+			"X-Session-Token":"session token(string)"
+		},
+	    "success_response":{
+	    	"code":"200 OK",
+	    	"body":[
+	    		{
+	    			"user":"user_name(string:3:64)",
+	    			"permissions":{
+	    				"clone":true,
+	    				"push":false
+	    			}
+	    		},
+	    		{
+	    			"user":"user_name2(string:3:64)",
+	    			"permissions":{
+	    				"clone":true,
+	    				"push":true
+	    			}
+	    		}
+	    	]
+	    },
+	    "error_responses":[
+			{
+		    	"code":"400 Bad Request",
+		    	"body":{
+		    		"code":400,
+		            "error" : "Invalid repository name",
+		            "doc":"/docs/permissions.json"
+		        }
+		    },
+		    {
+		    	"code":"404 Not Found",
+		    	"body":{
+		    		"code":404,
+		            "error" : "Unknown repository name",
+		            "doc":"/docs/permissions.json"
+		        }
+		    },
+			{
+		    	"code":"401 Unauthorized",
+		    	"body":{
+		    		"code":401,
+        		    "error" : "Requires authentication and authorization",
+		            "doc":"/docs/permissions.json"
+		        }
+		    }
+	    ],
+	    "sample_call":"TODO"
+   	},
+   	{
+		"name":"Add permission",
+		"description":"Add permission to the given repository",
+		"url":"/v1/permissions/:owner_name/:repo_name",
+		"method":"POST",
+		"url_params":null,
+		"header_params":{
+			"X-Session-Token":"session token(string)"
+		},
+		"body_params":{
+			"user":"user_name2(string:3:64)",
+			"permissions":{
+				"clone":true,
+				"push":true
+			}
+		},
+	    "success_response":{
+	    	"code":"201 Created",
+	    	"body":[
+	    		{
+	    			"user":"user_name(string:3:64)",
+	    			"permissions":{
+	    				"clone":true,
+	    				"push":false
+	    			}
+	    		},
+	    		{
+	    			"user":"user_name2(string:3:64)",
+	    			"permissions":{
+	    				"clone":true,
+	    				"push":true
+	    			}
+	    		}
+	    	]
+	    },
+	    "error_responses":[
+			{
+		    	"code":"400 Bad Request",
+		    	"body":{
+		    		"code":400,
+		            "error" : "Invalid repository name",
+		            "doc":"/docs/permissions.json"
+		        }
+		    },
+		    {
+		    	"code":"404 Not Found",
+		    	"body":{
+		    		"code":404,
+		            "error" : "Unknown repository name",
+		            "doc":"/docs/permissions.json"
+		        }
+		    },
+			{
+		    	"code":"401 Unauthorized",
+		    	"body":{
+		    		"code":401,
+        		    "error" : "Requires authentication and authorization",
+		            "doc":"/docs/permissions.json"
+		        }
+		    },
+		    {
+		    	"code":"400 Bad Request",
+		    	"body":{
+		    		"code":400,
+		            "error" : "Invalid permission object",
+		            "doc":"/docs/permissions.json"
+		        }
+		    },
+		    {
+		    	"code":"409 Conflict",
+		    	"body":{
+		    		"code":409,
+		            "error" : "Permission for this user is already set on this repository. Delete it before setting it again.",
+		            "doc":"/docs/permissions.json"
+		        }
+		    }
+	    ],
+	    "sample_call":"TODO"
+   	},
+   	{
+		"name":"Delete permission",
+		"description":"Delete permission for \":user\" from the given \":owner_name/:repo_name\" repository",
+		"url":"/v1/permissions/:owner_name/:repo_name/:user",
+		"method":"DELETE",
+		"url_params":null,
+		"header_params":{
+			"X-Session-Token":"session token(string)"
+		},
+		"body_params":null,
+	    "success_response":{
+	    	"code":"200 OK",
+	    	"body":null
+	    },
+	    "error_responses":[
+		    {
+		    	"code":"400 Bad Request",
+		    	"body":{
+		    		"code":400,
+		            "error" : "Invalid repository name",
+		            "doc":"/docs/permissions.json"
+		        }
+		    },
+		    {
+		    	"code":"400 Bad Request",
+		    	"body":{
+		    		"code":400,
+		            "error" : "Invalid user name",
+		            "doc":"/docs/permissions.json"
+		        }
+		    },
+		    {
+		    	"code":"404 Not Found",
+		    	"body":{
+		    		"code":404,
+		            "error" : "No permission for this user was found on this repository",
+		            "doc":"/docs/permissions.json"
+		        }
+		    },
+			{
+		    	"code":"401 Unauthorized",
+		    	"body":{
+		    		"code":401,
+        		    "error" : "Requires authentication and authorization",
+		            "doc":"/docs/permissions.json"
+		        }
+		    }
+	    ],
+	    "sample_call":"TODO"
+   	}	
+]

@@ -3,11 +3,12 @@
         "silex/silex": "1.0.*@dev",
         "doctrine/dbal": "2.1.*",
         "monolog/monolog": ">=1.0.0",
+        "symfony/validator": "2.1.*",
         "jaz303/phake": "dev-master"
     },
     "require-dev": {
         "mockery/mockery": "dev-master",
-        "behat/behat": "2.3.*",
+        "behat/behat": "2.4.*",
         "guzzle/guzzle": "2.4.*"
     },
     "autoload": {

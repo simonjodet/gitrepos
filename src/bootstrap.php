@@ -3,8 +3,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 use
     \Symfony\Component\HttpFoundation\Request,
-    \Symfony\Component\Validator\Constraints as Assert,
-    \Silex\Provider\FormServiceProvider;
+    \Symfony\Component\Validator\Constraints as Assert;
 
 $app = new \Silex\Application();
 $Configuration = new \Gitrepos\Configuration(__DIR__ . '/../conf/conf.json');
@@ -25,46 +24,7 @@ $app->register(
     )
 );
 
-$app->register(new Silex\Provider\SessionServiceProvider());
-
 $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
-
-$app->register(
-    new Silex\Provider\TwigServiceProvider(),
-    array(
-        'twig.path' => __DIR__ . '/views'
-    )
-);
-
-$app->register(
-    new FormServiceProvider(),
-    array(
-        'form.secret' => $app['conf']['form.secret']
-    )
-);
-
-$app->register(
-    new Silex\Provider\TranslationServiceProvider(),
-    array(
-        'locale_fallback' => $app['conf']['translation.locale_fallback']
-    )
-);
-
-$app->register(new Silex\Provider\ValidatorServiceProvider());
-
-$app->register(new \Silex\Provider\SecurityServiceProvider());
-$app['security.firewalls'] = array(
-    'user_firewall' => array(
-        'pattern' => new \Gitrepos\UserRequestMatcher($app['request']),
-        'form' => array('login_path' => '/login', 'check_path' => '/authenticate'),
-        'logout' => array('logout_path' => '/logout'),
-        'users' => $app->share(
-            function () use ($app) {
-                return new \Gitrepos\UserProvider($app);
-            }
-        )
-    )
-);
 
 $app->register(
     new Silex\Provider\DoctrineServiceProvider(),
@@ -75,6 +35,8 @@ $app->register(
         )
     )
 );
+
+$app->register(new Silex\Provider\ValidatorServiceProvider());
 
 $app['model.factory'] = $app->share(
     function ($app) {

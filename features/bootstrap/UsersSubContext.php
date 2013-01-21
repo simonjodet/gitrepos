@@ -1,8 +1,7 @@
 <?php
 
 use Behat\Behat\Context\BehatContext,
-    Behat\Gherkin\Node\PyStringNode,
-    Guzzle\Http\Client;
+    Behat\Gherkin\Node\PyStringNode;
 
 class UsersSubContext extends BehatContext
 {
@@ -10,7 +9,7 @@ class UsersSubContext extends BehatContext
     private $password;
     private $email;
     /**
-     * @var \Guzzle\Http\Message\Response $response
+     * @var \HttpWrapper\Response $response
      */
     private $response;
 
@@ -48,16 +47,16 @@ class UsersSubContext extends BehatContext
      */
     public function iRequestTheUrlWithThePostMethod($url)
     {
-        $client = new Client();
-        $this->response = $client->post(
+        $Request = new \HttpWrapper\Request();
+        $this->response = $Request->post(
             'http://localhost:8000' . $url,
-            null,
+            array(),
             '{
 	        "username":"' . $this->userName . '",
 	        "email":"' . $this->email . '",
 	        "password":"' . $this->password . '"
 	    }'
-        )->send();
+        );
     }
 
     /**
@@ -66,7 +65,7 @@ class UsersSubContext extends BehatContext
     public function theResponseCodeShouldBe($responseCode)
     {
         $responseCode = intval($responseCode, 10);
-        assertEquals($responseCode, $this->response->getStatusCode());
+        assertEquals($responseCode, $this->response->getCode());
     }
 
     /**
@@ -74,6 +73,14 @@ class UsersSubContext extends BehatContext
      */
     public function theBodyShouldBe($body)
     {
-        assertEquals($body, $this->response->getBody(true));
+        assertEquals($body, $this->response->getBody());
+    }
+
+    /**
+     * @Given /^the body string should be:$/
+     */
+    public function theBodyStringShouldBe(PyStringNode $string)
+    {
+        assertEquals($string->getRaw(), $this->response->getBody());
     }
 }

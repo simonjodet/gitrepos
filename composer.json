@@ -9,7 +9,7 @@
     "require-dev": {
         "mockery/mockery": "dev-master",
         "behat/behat": "2.4.*",
-        "guzzle/guzzle": "2.4.*"
+        "simonjodet/http-wrapper": "dev-master"
     },
     "autoload": {
         "psr-0": {

@@ -5,8 +5,8 @@ use Behat\Behat\Context\BehatContext,
 
 class UsersSubContext extends BehatContext
 {
-    private $userName;
-    private $password;
+    private $userName = '';
+    private $password = '';
     private $email;
     /**
      * @var \HttpWrapper\Response $response
@@ -27,11 +27,51 @@ class UsersSubContext extends BehatContext
     }
 
     /**
+     * @Given /^that I want to create a new user with a username shorter than (\d+) characters$/
+     */
+    public function thatIWantToCreateANewUserWithAUsernameShorterThanCharacters($length)
+    {
+        while (strlen($this->userName) < $length - 1) {
+            $this->userName .= 'a';
+        }
+    }
+
+    /**
+     * @Given /^that I want to create a new user with a username longer than (\d+) characters$/
+     */
+    public function thatIWantToCreateANewUserWithAUsernameLongerThanCharacters($length)
+    {
+        while (strlen($this->userName) < $length + 1) {
+            $this->userName .= 'a';
+        }
+    }
+
+    /**
      * @Given /^his password is "([^"]*)"$/
      */
     public function hisPasswordIs($password)
     {
         $this->password = $password;
+    }
+
+    /**
+     * @Given /^his password is shorter than (\d+) characters$/
+     */
+    public function hisPasswordIsShorterThanCharacters($length)
+    {
+        while (strlen($this->password) < $length - 1) {
+            $this->password .= 'a';
+        }
+    }
+
+    /**
+     * @Given /^his password is longer than (\d+) characters$/
+     */
+    public function hisPasswordIsLongerThanCharacters($length)
+    {
+        while (strlen($this->password) < $length + 1) {
+            $this->password .= 'a';
+        }
     }
 
     /**

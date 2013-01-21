@@ -12,7 +12,7 @@ Feature: users_create_account
     And the body should be ""
 
   Scenario: Check for short username
-    Given that I want to create a new "sy" user
+    Given that I want to create a new user with a username shorter than 3 characters
     And his password is "azeaze"
     And his email is "nobody@example.com"
     When I request the URL "/v1/users" with the POST method
@@ -20,4 +20,48 @@ Feature: users_create_account
     And the body string should be:
     """
 {"code":400,"message":"Invalid username","doc":"\/docs\/users.json"}
+    """
+
+  Scenario: Check for long username
+    Given that I want to create a new user with a username longer than 64 characters
+    And his password is "azeaze"
+    And his email is "nobody@example.com"
+    When I request the URL "/v1/users" with the POST method
+    Then the response code should be "400"
+    And the body string should be:
+    """
+{"code":400,"message":"Invalid username","doc":"\/docs\/users.json"}
+    """
+
+  Scenario: Check for invalid email
+    Given that I want to create a new "simon" user
+    And his password is "azeaze"
+    And his email is "not_an_email.com"
+    When I request the URL "/v1/users" with the POST method
+    Then the response code should be "400"
+    And the body string should be:
+    """
+{"code":400,"message":"Invalid email","doc":"\/docs\/users.json"}
+    """
+
+  Scenario: Check for short password
+    Given that I want to create a new "simon" user
+    And his password is shorter than 6 characters
+    And his email is "nobody@example.com"
+    When I request the URL "/v1/users" with the POST method
+    Then the response code should be "400"
+    And the body string should be:
+    """
+{"code":400,"message":"Invalid password","doc":"\/docs\/users.json"}
+    """
+
+  Scenario: Check for long password
+    Given that I want to create a new "simon" user
+    And his password is longer than 128 characters
+    And his email is "nobody@example.com"
+    When I request the URL "/v1/users" with the POST method
+    Then the response code should be "400"
+    And the body string should be:
+    """
+{"code":400,"message":"Invalid password","doc":"\/docs\/users.json"}
     """

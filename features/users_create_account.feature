@@ -4,9 +4,9 @@ Feature: users_create_account
   I need to be able to create a user account
 
   Scenario: Create an account
-    Given that I want to create a new "simon" user
+    Given that I want to create a new "simonjodet1" user
     And his password is "azeaze"
-    And his email is "nobody@example.com"
+    And his email is "nobody1@example.com"
     When I request the URL "/v1/users" with the POST method
     Then the response code should be "201"
     And the body should be ""
@@ -64,4 +64,30 @@ Feature: users_create_account
     And the body string should be:
     """
 {"code":400,"message":"Invalid password","doc":"\/docs\/users.json"}
+    """
+
+  Scenario: Check for duplicate username
+    Given that I want to create a new "simonjodet2" user
+    And his password is "azeaze"
+    And his email is "nobody2@example.com"
+    When I request the URL "/v1/users" with the POST method
+    And his email is "nobody3@example.com"
+    And I request the URL "/v1/users" with the POST method again
+    Then the response code should be "409"
+    And the body string should be:
+    """
+{"code":409,"message":"This username is already used","doc":"\/docs\/users.json"}
+    """
+
+  Scenario: Check for duplicate email
+    Given that I want to create a new "simonjodet2" user
+    And his password is "azeaze"
+    And his email is "nobody2@example.com"
+    When I request the URL "/v1/users" with the POST method
+    And his email is "nobody2@example.com"
+    And I request the URL "/v1/users" with the POST method again
+    Then the response code should be "409"
+    And the body string should be:
+    """
+{"code":409,"message":"This email is already used","doc":"\/docs\/users.json"}
     """

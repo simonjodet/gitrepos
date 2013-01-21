@@ -43,5 +43,17 @@ $app['model.factory'] = $app->share(
         return new \Gitrepos\Models\ModelFactory($app);
     }
 );
+$app['passwords'] = $app->share(
+    function () {
+        return new \Gitrepos\Passwords();
+    }
+);
+
+$app->error(
+    function (\Exception $e) use ($app) {
+        return 'Exception: "' . $e->getMessage() . '" in ' . $e->getFile() . ' at line ' . $e->getLine(
+        ) . ':' . PHP_EOL . $e->getTraceAsString();
+    }
+);
 
 return require __DIR__ . '/routes.php';

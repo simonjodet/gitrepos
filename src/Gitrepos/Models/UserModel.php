@@ -18,10 +18,7 @@ class UserModel
 
     public function create(\Gitrepos\Entities\User $User)
     {
-        $encodedPassword = $this->app['security.encoder_factory']->getEncoder($User)->encodePassword(
-            $User->getPassword(),
-            $User->getSalt()
-        );
+        $encodedPassword = $this->app['passwords']->password_hash($User->getPassword(), PASSWORD_BCRYPT);
 
         $User->setPassword($encodedPassword);
         try {

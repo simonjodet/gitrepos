@@ -16,11 +16,11 @@ class UserModelTest extends \PHPUnit_Framework_TestCase
 
     private function getEncoderMock(\Silex\Application $app)
     {
-        $encoderFactoryMock = \Mockery::mock('\Symfony\Component\Security\Core\Encoder\EncoderFactory');
-        $encoderFactoryMock
-            ->shouldReceive('getEncoder->encodePassword')
+        $PasswordsMock = \Mockery::mock('\Gitrepos\Passwords');
+        $PasswordsMock
+            ->shouldReceive('password_hash')
             ->andReturn('encoded pwd');
-        $app['security.encoder_factory'] = $encoderFactoryMock;
+        $app['passwords'] = $PasswordsMock;
         return $app;
     }
 

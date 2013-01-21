@@ -4,6 +4,7 @@
         "doctrine/dbal": "2.1.*",
         "monolog/monolog": ">=1.0.0",
         "symfony/validator": "2.1.*",
+        "ircmaxell/password-compat": "1.0.*@dev",
         "jaz303/phake": "dev-master"
     },
     "require-dev": {

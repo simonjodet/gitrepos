@@ -8,6 +8,7 @@ class UsersSubContext extends BehatContext
     private $userName = '';
     private $password = '';
     private $email;
+    private $scenario_title;
     /**
      * @var \HttpWrapper\Response $response
      */
@@ -16,6 +17,13 @@ class UsersSubContext extends BehatContext
     public function __construct()
     {
         // do subcontext initialization
+    }
+
+    /** @BeforeScenario */
+    public function before(Behat\Behat\Event\ScenarioEvent $event)
+    {
+        $this->scenario_title = $event->getScenario()->getTitle();
+        exec(__DIR__ . '/../../vendor/bin/phake db:reset');
     }
 
     /**
@@ -89,7 +97,24 @@ class UsersSubContext extends BehatContext
     {
         $Request = new \HttpWrapper\Request();
         $this->response = $Request->post(
-            'http://localhost:8000' . $url,
+            'http://localhost:8000' . $url . '?scenario=' . urlencode($this->scenario_title),
+            array(),
+            '{
+	        "username":"' . $this->userName . '",
+	        "email":"' . $this->email . '",
+	        "password":"' . $this->password . '"
+	    }'
+        );
+    }
+
+    /**
+     * @Given /^I request the URL "([^"]*)" with the POST method again$/
+     */
+    public function iRequestTheUrlWithThePostMethodAgain($url)
+    {
+        $Request = new \HttpWrapper\Request();
+        $this->response = $Request->post(
+            'http://localhost:8000' . $url . '?scenario=' . urlencode($this->scenario_title),
             array(),
             '{
 	        "username":"' . $this->userName . '",
@@ -104,6 +129,7 @@ class UsersSubContext extends BehatContext
      */
     public function theResponseCodeShouldBe($responseCode)
     {
+//        print_r(json_decode(strval($this->response->getBody())));
         $responseCode = intval($responseCode, 10);
         assertEquals($responseCode, $this->response->getCode());
     }

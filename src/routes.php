@@ -31,6 +31,15 @@ $app->post(
                 throw new \Exception('Invalid password', 400);
             }
 
+            $UserModel = $app['model.factory']->get('User');
+            try {
+                $UserModel->create(new \Gitrepos\Entities\User($params));
+            } catch (\Gitrepos\Exceptions\DuplicateUsername $e) {
+                throw new \Exception('This username is already used', 409);
+            } catch (\Gitrepos\Exceptions\DuplicateEmail $e) {
+                throw new \Exception('This email is already used', 409);
+            }
+
             $response = $app->json(null, 201);
             $response->setContent('');
         } catch (\Exception $e) {

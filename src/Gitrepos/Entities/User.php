@@ -8,7 +8,7 @@ namespace Gitrepos\Entities;
 /**
  * User
  */
-class User implements \Symfony\Component\Security\Core\User\AdvancedUserInterface
+class User
 {
     /**
      * @var string

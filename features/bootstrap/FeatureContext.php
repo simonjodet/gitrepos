@@ -30,6 +30,7 @@ class FeatureContext extends BehatContext
     public function __construct(array $parameters)
     {
         $this->useContext('users', new UsersSubContext());
+        $this->useContext('sessions', new SessionsSubContext());
     }
 
 

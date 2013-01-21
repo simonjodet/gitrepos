@@ -5,14 +5,14 @@ use Behat\Behat\Context\BehatContext,
 
 class UsersSubContext extends BehatContext
 {
-    private $userName = '';
-    private $password = '';
-    private $email;
-    private $scenario_title;
+    public $userName = '';
+    public $password = '';
+    public $email;
+    public $scenario_title;
     /**
      * @var \HttpWrapper\Response $response
      */
-    private $response;
+    public $response;
 
     public function __construct()
     {

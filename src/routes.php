@@ -55,4 +55,14 @@ $app->post(
     }
 );
 
+$app->post(
+    '/v1/sessions',
+    function (Request $request) use ($app) {
+        $response = $app->json('', 230);
+        $response->setContent('{"session":"azeqsdqsd","ttl":"3600"}');
+        return $response;
+    }
+);
+
+
 return $app;

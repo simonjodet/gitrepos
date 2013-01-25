@@ -115,4 +115,163 @@ class UserModelTest extends \PHPUnit_Framework_TestCase
 
         $UserModel->create($User);
     }
+
+    public function test_authenticate_checks_password()
+    {
+        $app = new \Silex\Application();
+        $PasswordsMock = \Mockery::mock('\Gitrepos\Passwords');
+        $PasswordsMock
+            ->shouldReceive('password_verify')
+            ->once()
+            ->andReturn(true);
+        $app['passwords'] = $PasswordsMock;
+
+        $statementMock = \Mockery::mock();
+        $statementMock
+            ->shouldReceive('bindValue')
+            ->with('username', 'user_credential')
+            ->once();
+
+
+        $statementMock
+            ->shouldReceive('execute')
+            ->once();
+
+        $statementMock
+            ->shouldReceive('fetch')
+            ->with(\PDO::FETCH_ASSOC)
+            ->once()
+            ->andReturn(
+                array(
+                    'id' => 42,
+                    'username' => 'simon',
+                    'email' => 'nobody@example.com',
+                    'password' => 'some hash'
+                )
+            );
+
+        $dbMock = \Mockery::mock();
+        $dbMock
+            ->shouldReceive('prepare')
+            ->with("SELECT * FROM users WHERE username = :username LIMIT 1")
+            ->once()
+            ->andReturn($statementMock);
+
+        $app['db'] = $dbMock;
+
+        $UserModel = new \Gitrepos\Models\UserModel($app);
+        $return = $UserModel->authenticate('user_credential', 'pwd');
+        $this->assertEquals(
+            array(
+                'id' => 42,
+                'username' => 'simon',
+                'email' => 'nobody@example.com'
+            ),
+            $return
+        );
+    }
+
+    public function test_authenticate_returns_user_info_without_password_on_correct_credentials()
+    {
+        $app = new \Silex\Application();
+        $PasswordsMock = \Mockery::mock('\Gitrepos\Passwords');
+        $PasswordsMock
+            ->shouldReceive('password_verify')
+            ->andReturn(true);
+        $app['passwords'] = $PasswordsMock;
+
+        $statementMock = \Mockery::mock();
+        $statementMock->shouldReceive('bindValue');
+        $statementMock->shouldReceive('execute');
+
+        $statementMock
+            ->shouldReceive('fetch')
+            ->andReturn(
+                array(
+                    'id' => 42,
+                    'username' => 'simon',
+                    'email' => 'nobody@example.com',
+                    'password' => 'some hash'
+                )
+            );
+
+        $dbMock = \Mockery::mock();
+        $dbMock
+            ->shouldReceive('prepare')
+            ->andReturn($statementMock);
+
+        $app['db'] = $dbMock;
+
+        $UserModel = new \Gitrepos\Models\UserModel($app);
+        $return = $UserModel->authenticate('user_credential', 'pwd');
+        $this->assertEquals(
+            array(
+                'id' => 42,
+                'username' => 'simon',
+                'email' => 'nobody@example.com'
+            ),
+            $return
+        );
+    }
+
+    public function test_authenticate_returns_false_on_bad_password()
+    {
+        $app = new \Silex\Application();
+        $PasswordsMock = \Mockery::mock('\Gitrepos\Passwords');
+        $PasswordsMock
+            ->shouldReceive('password_verify')
+            ->andReturn(false);
+        $app['passwords'] = $PasswordsMock;
+
+        $statementMock = \Mockery::mock();
+        $statementMock->shouldReceive('bindValue');
+        $statementMock->shouldReceive('execute');
+
+        $statementMock
+            ->shouldReceive('fetch')
+            ->andReturn(
+                array(
+                    'id' => 42,
+                    'username' => 'simon',
+                    'email' => 'nobody@example.com',
+                    'password' => 'some hash'
+                )
+            );
+
+        $dbMock = \Mockery::mock();
+        $dbMock
+            ->shouldReceive('prepare')
+            ->andReturn($statementMock);
+
+        $app['db'] = $dbMock;
+
+        $UserModel = new \Gitrepos\Models\UserModel($app);
+        $return = $UserModel->authenticate('user_credential', 'pwd');
+        $this->assertFalse($return);
+    }
+
+    public function test_authenticate_returns_false_on_bad_user()
+    {
+        $app = new \Silex\Application();
+        $statementMock = \Mockery::mock();
+        $statementMock->shouldReceive('bindValue');
+        $statementMock->shouldReceive('execute');
+
+        $statementMock
+            ->shouldReceive('fetch')
+            ->andReturn(
+                false
+            );
+
+        $dbMock = \Mockery::mock();
+        $dbMock
+            ->shouldReceive('prepare')
+            ->andReturn($statementMock);
+
+        $app['db'] = $dbMock;
+
+        $UserModel = new \Gitrepos\Models\UserModel($app);
+        $return = $UserModel->authenticate('user_credential', 'pwd');
+        $this->assertFalse($return);
+    }
 }

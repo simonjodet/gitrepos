@@ -1,122 +1,121 @@
 [
-	{
-		"name":"List keys",
-		"description":"List the current user's keys",
-		"url":"/v1/keys",
-		"method":"GET",
-		"url_params":null,
-		"header_params":{
-			"X-Session-Token":"session token(string)"
-		},
-	    "success_response":{
-	    	"code":"200 OK",
-	    	"body":[
-	    		{
-	    			"id":37,
-	    			"title":"key 1 title(string)",
-	    			"value":"key 1 value(string)"
-	    		},
-	    		{
-	    			"id":42,
-	    			"title":"key 2 title(string)",
-	    			"value":"key 2 value(string)"
-	    		}
-	    	]
-	    },
-	    "error_responses":[
-			{
-		    	"code":"401 Unauthorized",
-		    	"body":{
-		    		"code":401,
-        		    "error" : "Requires authentication",
-		            "doc":"/docs/keys.json"
-		        }
-		    }
-	    ],
-	    "sample_call":"TODO"
-   	},
-   	{
-		"name":"Add key",
-		"description":"Add an SSH key to the current user's account",
-		"url":"/v1/keys",
-		"method":"POST",
-		"url_params":null,
-		"header_params":{
-			"X-Session-Token":"session token(string)"
-		},
-		"body_params":{
-	        "title":"string:1:128",
-	        "value":"string:1:512"
-	    },
-	    "success_response":{
-	    	"code":"201 Created",
-	    	"body":
-    		{
-    			"id":42,
-    			"title":"key 2 title(string)",
-    			"value":"key 2 value(string)"
-    		}
-	    },
-	    "error_responses":[
-		    {
-		    	"code":"400 Bad Request",
-		    	"body":{
-		    		"code":400,
-		            "error" : "Invalid title",
-		            "doc":"/docs/keys.json"
-		        }
-		    },
-		    {
-		    	"code":"400 Bad Request",
-		    	"body":{
-		    		"code":400,
-		            "error" : "Invalid value",
-		            "doc":"/docs/keys.json"
-		        }
-		    },
-			{
-		    	"code":"401 Unauthorized",
-		    	"body":{
-		    		"code":401,
-        		    "error" : "Requires authentication",
-		            "doc":"/docs/keys.json"
-		        }
-		    }
-	    ],
-	    "sample_call":"TODO"
-   	},
-   	{
-		"name":"DELETE key",
-		"description":"Delete an SSH key from the current user's account",
-		"url":"/v1/keys/:id",
-		"method":"DELETE",
-		"url_params":null,
-		"header_params":{
-			"X-Session-Token":"session token(string)"
-		},
-		"body_params":null,
-	    "success_response":{
-	    	"code":"200 OK",
-	    	"body":null
-	    },
-	    "error_responses":[
-		    {
-		    	"code":"400 Bad Request",
-		    	"body":{
-		    		"code":400,
-		            "error" : "Invalid key id",
-		            "doc":"/docs/keys.json"
-		        }
-		    },
-			{
-		    	"code":"401 Unauthorized",
-		    	"body":{
-		    		"code":401,
-        		    "error" : "Requires authentication",
-		            "doc":"/docs/keys.json"
-		        }
-		    }
-	    ],
-	    "sample_call":"TODO"
-   	}	
+    {
+        "name": "List keys",
+        "description": "List the current user's keys",
+        "url": "/v1/keys",
+        "method": "GET",
+        "url_params": null,
+        "header_params": [
+            "Cookie: SESSION=session token(string)"
+        ],
+        "success_response": {
+            "code": "200 OK",
+            "body": [
+                {
+                    "id": 37,
+                    "title": "key 1 title(string)",
+                    "value": "key 1 value(string)"
+                },
+                {
+                    "id": 42,
+                    "title": "key 2 title(string)",
+                    "value": "key 2 value(string)"
+                }
+            ]
+        },
+        "error_responses": [
+            {
+                "code": "401 Unauthorized",
+                "body": {
+                    "code": 401,
+                    "error": "Requires authentication",
+                    "doc": "/docs/keys.json"
+                }
+            }
+        ],
+        "sample_call": "TODO"
+    },
+    {
+        "name": "Add key",
+        "description": "Add an SSH key to the current user's account",
+        "url": "/v1/keys",
+        "method": "POST",
+        "url_params": null,
+        "header_params": [
+            "Cookie: SESSION=session token(string)"
+        ],
+        "body_params": {
+            "title": "string:1:128",
+            "value": "string:1:512"
+        },
+        "success_response": {
+            "code": "201 Created",
+            "body": {
+                "id": 42,
+                "title": "key 2 title(string)",
+                "value": "key 2 value(string)"
+            }
+        },
+        "error_responses": [
+            {
+                "code": "400 Bad Request",
+                "body": {
+                    "code": 400,
+                    "error": "Invalid title",
+                    "doc": "/docs/keys.json"
+                }
+            },
+            {
+                "code": "400 Bad Request",
+                "body": {
+                    "code": 400,
+                    "error": "Invalid value",
+                    "doc": "/docs/keys.json"
+                }
+            },
+            {
+                "code": "401 Unauthorized",
+                "body": {
+                    "code": 401,
+                    "error": "Requires authentication",
+                    "doc": "/docs/keys.json"
+                }
+            }
+        ],
+        "sample_call": "TODO"
+    },
+    {
+        "name": "DELETE key",
+        "description": "Delete an SSH key from the current user's account",
+        "url": "/v1/keys/:id",
+        "method": "DELETE",
+        "url_params": null,
+        "header_params": [
+            "Cookie: SESSION=session token(string)"
+        ],
+        "body_params": null,
+        "success_response": {
+            "code": "200 OK",
+            "body": null
+        },
+        "error_responses": [
+            {
+                "code": "400 Bad Request",
+                "body": {
+                    "code": 400,
+                    "error": "Invalid key id",
+                    "doc": "/docs/keys.json"
+                }
+            },
+            {
+                "code": "401 Unauthorized",
+                "body": {
+                    "code": 401,
+                    "error": "Requires authentication",
+                    "doc": "/docs/keys.json"
+                }
+            }
+        ],
+        "sample_call": "TODO"
+    }
 ]

@@ -40,7 +40,7 @@ group(
                     array(
                         'username' => 'simon',
                         'email' => 'simon@jodet.com',
-                        'password' => 'EO6ukehUbgaBh98IExJmqlIUShu2rh8yU7kaOgAH3bcvMcRw7nCmA9AghmJT1o20Z+/DvKkxx9yQtJoOLdtIeg=='
+                        'password' => '$2y$10$QnyEiPQkgo67wIQTdhwQWOHksnlJjL65NNHzT9vR/d7Ux.Nu.9vGq'
                     )
                 );
             }

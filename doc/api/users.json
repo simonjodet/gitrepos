@@ -1,62 +1,62 @@
 [
-	{
-		"name":"Create account",
-		"description":"Creates account with given credentials and information",
-		"url":"/v1/users",
-		"method":"POST",
-		"url_params":null,
-		"header_params":null,
-		"body_params":{
-	        "username":"string:3:64",
-	        "email":"string:valid email",
-	        "password":"string:6:128"
-	    },
-	    "success_response":{
-	    	"code":"201 Created",
-	    	"body":null
-	    },
-	    "error_responses":[
-		    {
-		    	"code":"400 Bad Request",
-		    	"body":{
-		    		"code":400,
-		            "error" : "Invalid username",
-		            "doc":"/docs/users.json"
-		        }
-		    },
-		    {
-		    	"code":"400 Bad Request",
-		    	"body":{
-		    		"code":400,
-		            "error" : "Invalid email",
-		            "doc":"/docs/users.json"
-		        }
-		    },
-		    {
-		    	"code":"400 Bad Request",
-		    	"body":{
-		    		"code":400,
-		            "error" : "Invalid password",
-		            "doc":"/docs/users.json"
-		        }
-		    },
-		    {
-		    	"code":"409 Conflict",
-		    	"body":{
-		    		"code":409,
-		            "error" : "This username is already used",
-		            "doc":"/docs/users.json"
-		        }
-		    },
-		    {
-		    	"code":"409 Conflict",
-		    	"body":{
-		    		"code":409,
-		            "error" : "This email address is already used",
-		            "doc":"/docs/users.json"
-		        }
-		    }
-	    ],
-	    "sample_call":"TODO"
-   	}
+    {
+        "name": "Create account",
+        "description": "Creates account with given credentials and information",
+        "url": "/v1/users",
+        "method": "POST",
+        "url_params": null,
+        "header_params": null,
+        "body_params": {
+            "username": "string:3:64",
+            "email": "string:valid email",
+            "password": "string:6:128"
+        },
+        "success_response": {
+            "code": "201 Created",
+            "body": null
+        },
+        "error_responses": [
+            {
+                "code": "400 Bad Request",
+                "body": {
+                    "code": 400,
+                    "error": "Invalid username",
+                    "doc": "/docs/users.json"
+                }
+            },
+            {
+                "code": "400 Bad Request",
+                "body": {
+                    "code": 400,
+                    "error": "Invalid email",
+                    "doc": "/docs/users.json"
+                }
+            },
+            {
+                "code": "400 Bad Request",
+                "body": {
+                    "code": 400,
+                    "error": "Invalid password",
+                    "doc": "/docs/users.json"
+                }
+            },
+            {
+                "code": "409 Conflict",
+                "body": {
+                    "code": 409,
+                    "error": "This username is already used",
+                    "doc": "/docs/users.json"
+                }
+            },
+            {
+                "code": "409 Conflict",
+                "body": {
+                    "code": 409,
+                    "error": "This email address is already used",
+                    "doc": "/docs/users.json"
+                }
+            }
+        ],
+        "sample_call": "curl -i --request POST --data '{\"username\":\"username\",\"email\": \"username@example.com\",\"password\": \"password_example\"}' --header 'Cookie: SESSION=gbg5opkv43n1sro3npnjanf726' http://localhost:8000/v1/users"
+}
 ]

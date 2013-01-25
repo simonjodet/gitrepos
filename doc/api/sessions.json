@@ -1,58 +1,60 @@
 [
-	{
-		"name":"Login",
-		"description":"Creates user session from the given credentials",
-		"url":"/v1/sessions",
-		"method":"POST",
-		"url_params":null,
-		"header_params":null,
-		"body_params":{
-	        "user":"username(string:3:64) || email(string:valid email)",
-	        "password":"string:6:128"
-	    },
-	    "success_response":{
-	    	"code":"230 Authentication Successful",
-	    	"body":{
-        		"session":"session token(string)",
-        		"ttl":"session duration in seconds(int)"
-    		}
-	    },
-	    "error_responses":[
-		    {
-		    	"code":"401 Unauthorized",
-		    	"body":{
-		    		"code":401,
-        		    "error" : "Bad credentials",
-		            "doc":"/docs/sessions.json"
-		        }
-		    }
-	    ],
-	    "sample_call":"TODO"
-   	},
-	{
-		"name":"Logout",
-		"description":"Invalidates the current session token",
-		"url":"/v1/sessions/current",
-		"method":"DELETE",
-		"url_params":null,
-		"header_params":{
-			"X-Session-Token":"session token(string)"
-		},
-		"body_params":null,
-	    "success_response":{
-	    	"code":"200 OK",
-	    	"body":null
-	    },
-	    "error_responses":[
-		    {
-		    	"code":"401 Unauthorized",
-		    	"body":{
-		    		"code":401,
-        		    "error" : "Requires authentication",
-		            "doc":"/docs/sessions.json"
-		        }
-		    }
-	    ],
-	    "sample_call":"TODO"
-   	}
+    {
+        "name": "Login",
+        "description": "Creates user session from the given credentials",
+        "url": "/v1/sessions",
+        "method": "POST",
+        "url_params": null,
+        "header_params": null,
+        "body_params": {
+            "username": "username(string:3:64)",
+            "password": "string:6:128"
+        },
+        "success_response": {
+            "code": "230 Authentication Successful",
+            "headers": [
+                "Set-Cookie: SESSION=session token(string); path=/"
+            ],
+            "body": {
+                "session": "session token(string)"
+            }
+        },
+        "error_responses": [
+            {
+                "code": "401 Unauthorized",
+                "body": {
+                    "code": 401,
+                    "error": "Bad credentials",
+                    "doc": "/docs/sessions.json"
+                }
+            }
+        ],
+        "sample_call": "TODO"
+    },
+    {
+        "name": "Logout",
+        "description": "Invalidates the current session token",
+        "url": "/v1/sessions/current",
+        "method": "DELETE",
+        "url_params": null,
+        "header_params": [
+            "Cookie: SESSION=session token(string)"
+        ],
+        "body_params": null,
+        "success_response": {
+            "code": "200 OK",
+            "body": null
+        },
+        "error_responses": [
+            {
+                "code": "401 Unauthorized",
+                "body": {
+                    "code": 401,
+                    "error": "Requires authentication",
+                    "doc": "/docs/sessions.json"
+                }
+            }
+        ],
+        "sample_call": "TODO"
+    }
 ]

@@ -56,10 +56,29 @@ class SessionsSubContext extends BehatContext
             'http://localhost:8000/v1/sessions?scenario=' . urlencode($this->scenario_title),
             array(),
             '{
-            "user":"' . $identifier . '",
+            "username":"' . $identifier . '",
             "password":"' . $usersContext->password . '"
     }'
         );
+        $usersContext->response = $this->response;
+    }
+
+    /**
+     * @Given /^I want to login with "([^"]*)" as password$/
+     */
+    public function iWantToLoginWithAsPassword($password)
+    {
+        $usersContext = $this->getMainContext()->getSubcontext('users');
+        $Request = new \HttpWrapper\Request();
+        $this->response = $Request->post(
+            'http://localhost:8000/v1/sessions?scenario=' . urlencode($this->scenario_title),
+            array(),
+            '{
+            "username":"' . $usersContext->userName . '",
+            "password":"' . $password . '"
+    }'
+        );
+        $usersContext->response = $this->response;
     }
 
     /**
@@ -67,6 +86,15 @@ class SessionsSubContext extends BehatContext
      */
     public function theBodyStringShouldMatchTheFollowingRegexp(PyStringNode $string)
     {
+//        echo $this->response->getBody() . PHP_EOL;
         assertRegExp(trim($string->getRaw()), trim($this->response->getBody()));
+    }
+
+    /**
+     * @Given /^the headers  should match the following regexp:$/
+     */
+    public function theHeadersShouldMatchTheFollowingRegexp(PyStringNode $string)
+    {
+        assertRegExp(trim($string->getRaw()), implode('', $this->response->getHeaders()));
     }
 }

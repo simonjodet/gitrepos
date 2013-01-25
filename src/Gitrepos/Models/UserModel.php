@@ -47,4 +47,22 @@ class UserModel
 
         return $User;
     }
+
+    public function authenticate($user, $password)
+    {
+        $sql = "SELECT * FROM users WHERE username = :username LIMIT 1";
+        /**
+         * @var $stmt \Doctrine\DBAL\Statement
+         */
+        $stmt = $this->app['db']->prepare($sql);
+        $stmt->bindValue('username', $user);
+        $stmt->execute();
+        $user = $stmt->fetch(\PDO::FETCH_ASSOC);
+        if ($user !== false && $this->app['passwords']->password_verify($password, $user['password'])) {
+            unset($user['password']);
+            return $user;
+        } else {
+            return false;
+        }
+    }
 }

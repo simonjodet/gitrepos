@@ -7,7 +7,6 @@ $app->post(
     function (Request $request) use ($app) {
         try {
             $params = json_decode($request->getContent(), true);
-
             if (json_last_error() !== JSON_ERROR_NONE) {
                 throw new \Exception('Invalid username', 400);
             }
@@ -58,8 +57,27 @@ $app->post(
 $app->post(
     '/v1/sessions',
     function (Request $request) use ($app) {
-        $response = $app->json('', 230);
-        $response->setContent('{"session":"azeqsdqsd","ttl":"3600"}');
+        $UserModel = $app['model.factory']->get('User');
+
+        $params = json_decode($request->getContent(), true);
+        $authentication = $UserModel->authenticate($params['username'], $params['password']);
+        if ($authentication !== false) {
+            session_name('SESSION');
+            session_start();
+
+            $response = $app->json('', 230);
+            $response->setContent('{"session":"' . session_id() . '"}');
+        } else {
+            $error_body =
+                array(
+                    'code' => 401,
+                    'message' => 'Bad credentials',
+                    'doc' => '/docs/sessions.json'
+                );
+            $response = $app->json($error_body, 401);
+            $response->setContent(json_encode($error_body));
+        }
+
         return $response;
     }
 );

@@ -60,7 +60,7 @@ class UserModel
         $user = $stmt->fetch(\PDO::FETCH_ASSOC);
         if ($user !== false && $this->app['passwords']->password_verify($password, $user['password'])) {
             unset($user['password']);
-            return $user;
+            return new \Gitrepos\Entities\User($user);
         } else {
             return false;
         }

@@ -14,6 +14,7 @@ class SessionsSubContext extends BehatContext
      * @var \HttpWrapper\Response $response
      */
     private $response;
+    private $session;
 
     public function __construct()
     {
@@ -86,7 +87,6 @@ class SessionsSubContext extends BehatContext
      */
     public function theBodyStringShouldMatchTheFollowingRegexp(PyStringNode $string)
     {
-//        echo $this->response->getBody() . PHP_EOL;
         assertRegExp(trim($string->getRaw()), trim($this->response->getBody()));
     }
 
@@ -96,5 +96,37 @@ class SessionsSubContext extends BehatContext
     public function theHeadersShouldMatchTheFollowingRegexp(PyStringNode $string)
     {
         assertRegExp(trim($string->getRaw()), implode('', $this->response->getHeaders()));
+    }
+
+    /**
+     * @Given /^that I\'m logged in as "([^"]*)" "([^"]*)"$/
+     */
+    public function thatIMLoggedInAs($username, $password)
+    {
+        $Request = new \HttpWrapper\Request();
+        $response = $Request->post(
+            'http://localhost:8000/v1/sessions?scenario=' . urlencode($this->scenario_title),
+            array(),
+            '{
+            "username":"' . $username . '",
+            "password":"' . $password . '"
+    }'
+        );
+        $response = json_decode($response->getBody(), true);
+        $this->session = $response['session'];
+    }
+
+    /**
+     * @When /^I log out$/
+     */
+    public function iLogOut()
+    {
+        $Request = new \HttpWrapper\Request();
+        $this->response = $Request->delete(
+            'http://localhost:8000/v1/sessions/current?scenario=' . urlencode($this->scenario_title),
+            array('Cookie: SESSION=' . $this->session)
+        );
+        $usersContext = $this->getMainContext()->getSubcontext('users');
+        $usersContext->response = $this->response;
     }
 }

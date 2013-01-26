@@ -129,7 +129,6 @@ class UsersSubContext extends BehatContext
      */
     public function theResponseCodeShouldBe($responseCode)
     {
-//        print_r(json_decode(strval($this->response->getBody())));
         $responseCode = intval($responseCode, 10);
         assertEquals($responseCode, $this->response->getCode());
     }
@@ -147,7 +146,6 @@ class UsersSubContext extends BehatContext
      */
     public function theBodyStringShouldBe(PyStringNode $string)
     {
-//        echo $this->response->getBody() . PHP_EOL;
         assertEquals($string->getRaw(), $this->response->getBody());
     }
 }

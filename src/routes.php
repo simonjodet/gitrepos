@@ -65,13 +65,17 @@ $app->post(
     function (Request $request) use ($app) {
         $UserModel = $app['model.factory']->get('User');
 
-        $authentication = $UserModel->authenticate(
+        /**
+         * @var $User \Gitrepos\Entities\User
+         */
+        $User = $UserModel->authenticate(
             $app['request.body_params']['username'],
             $app['request.body_params']['password']
         );
-        if ($authentication !== false) {
+        if ($User !== false) {
             session_name('SESSION');
             session_start();
+            $_SESSION['username'] = $User->getUsername();
 
             $response = $app->json('', 230);
             $response->setContent('{"session":"' . session_id() . '"}');
@@ -83,12 +87,36 @@ $app->post(
                     'doc' => '/docs/sessions.json'
                 );
             $response = $app->json($error_body, 401);
-            $response->setContent(json_encode($error_body));
         }
 
         return $response;
     }
 );
 
+$app->delete(
+    '/v1/sessions/current',
+    function (Request $request) use ($app) {
+        session_name('SESSION');
+        try {
+            session_start();
+        } catch (\Exception $e) {
+        }
+        if (!isset($_SESSION['username']) || $_SESSION['username'] == '') {
+            $error_body =
+                array(
+                    'code' => 401,
+                    'message' => 'Requires authentication',
+                    'doc' => '/docs/sessions.json'
+                );
+            $response = $app->json($error_body, 401);
+            return $response;
+        } else {
+            session_destroy();
+            setcookie(session_name(), '', 0, '/');
+            session_regenerate_id(true);
+            return '';
+        }
+    }
+);
 
 return $app;

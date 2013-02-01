@@ -1,4 +1,4 @@
-Feature: sessions_logout
+Feature: sessions_delete
   In order to have a secured experience with Gitrepos
   As a user
   I need to be able to invalidate my session

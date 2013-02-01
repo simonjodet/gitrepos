@@ -1,4 +1,4 @@
-Feature: users_create_account
+Feature: users_post
   In order to use Gitrepos features
   As a user
   I need to be able to create a user account

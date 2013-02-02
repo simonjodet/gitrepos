@@ -1,7 +1,6 @@
 <?php
 
-use Behat\Behat\Context\BehatContext,
-    Behat\Gherkin\Node\PyStringNode;
+use Behat\Behat\Context\BehatContext;
 
 class UsersSubContext extends BehatContext
 {
@@ -9,22 +8,6 @@ class UsersSubContext extends BehatContext
     public $password = '';
     public $email;
     public $scenario_title;
-    /**
-     * @var \HttpWrapper\Response $response
-     */
-    public $response;
-
-    public function __construct()
-    {
-        // do subcontext initialization
-    }
-
-    /** @BeforeScenario */
-    public function before(Behat\Behat\Event\ScenarioEvent $event)
-    {
-        $this->scenario_title = $event->getScenario()->getTitle();
-        exec(__DIR__ . '/../../vendor/bin/phake db:reset');
-    }
 
     /**
      * @Given /^that I want to create a new "([^"]*)" user$/
@@ -96,8 +79,8 @@ class UsersSubContext extends BehatContext
     public function iRequestTheUrlWithThePostMethod($url)
     {
         $Request = new \HttpWrapper\Request();
-        $this->response = $Request->post(
-            'http://localhost:8000' . $url . '?scenario=' . urlencode($this->scenario_title),
+        $this->getMainContext()->response = $Request->post(
+            'http://localhost:8000' . $url . '?scenario=' . urlencode($this->getMainContext()->scenario_title),
             array(),
             '{
 	        "username":"' . $this->userName . '",
@@ -113,8 +96,8 @@ class UsersSubContext extends BehatContext
     public function iRequestTheUrlWithThePostMethodAgain($url)
     {
         $Request = new \HttpWrapper\Request();
-        $this->response = $Request->post(
-            'http://localhost:8000' . $url . '?scenario=' . urlencode($this->scenario_title),
+        $this->getMainContext()->response = $Request->post(
+            'http://localhost:8000' . $url . '?scenario=' . urlencode($this->getMainContext()->scenario_title),
             array(),
             '{
 	        "username":"' . $this->userName . '",
@@ -122,30 +105,5 @@ class UsersSubContext extends BehatContext
 	        "password":"' . $this->password . '"
 	    }'
         );
-    }
-
-    /**
-     * @Then /^the response code should be "([^"]*)"$/
-     */
-    public function theResponseCodeShouldBe($responseCode)
-    {
-        $responseCode = intval($responseCode, 10);
-        assertEquals($responseCode, $this->response->getCode());
-    }
-
-    /**
-     * @Given /^the body should be "([^"]*)"$/
-     */
-    public function theBodyShouldBe($body)
-    {
-        assertEquals($body, $this->response->getBody());
-    }
-
-    /**
-     * @Given /^the body string should be:$/
-     */
-    public function theBodyStringShouldBe(PyStringNode $string)
-    {
-        assertEquals($string->getRaw(), $this->response->getBody());
     }
 }

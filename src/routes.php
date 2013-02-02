@@ -119,4 +119,20 @@ $app->delete(
     }
 );
 
+$app->post(
+    '/v1/keys',
+    function (Request $request) use ($app) {
+        $response = $app->json(
+            array(
+                'id' => 42,
+                'title' => $app['request.body_params']['title'],
+                'value' => $app['request.body_params']['value']
+            ),
+            201
+        );
+        return $response;
+    }
+);
+
+
 return $app;

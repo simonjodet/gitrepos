@@ -72,7 +72,7 @@ class UserModelTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('insert')
             ->andThrow(
                 'PDOException',
-                'SQLSTATE[23000]: Integrity constraint violation: 19 column username is not unique',
+                'Integrity constraint violation: 1062 Duplicate entry \'simon\' for key \'unique_users_username\'',
                 23000
             );
 
@@ -100,7 +100,7 @@ class UserModelTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('insert')
             ->andThrow(
                 'PDOException',
-                'SQLSTATE[23000]: Integrity constraint violation: 19 column email is not unique',
+                'Integrity constraint violation: 1062 Duplicate entry \'email@domain.com\' for key \'unique_users_email\'',
                 23000
             );
 

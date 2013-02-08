@@ -37,7 +37,7 @@ class KeysSubContext extends BehatContext
     {
         $Request = new \HttpWrapper\Request();
         $this->getMainContext()->response = $Request->post(
-            'http://localhost:8000/v1/keys?scenario=' . urlencode($this->getMainContext()->scenario_title),
+            $this->getMainContext()->url . '/v1/keys?scenario=' . urlencode($this->getMainContext()->scenario_title),
             array('Cookie: SESSION=' . $this->getMainContext()->session),
             json_encode(
                 array(

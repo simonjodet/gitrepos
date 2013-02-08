@@ -14,7 +14,7 @@ class KeyModel
     public function add(\Gitrepos\Entities\Key $Key)
     {
         $this->app['db']->insert(
-            'keys',
+            'sshkeys',
             array(
                 'title' => $Key->getTitle(),
                 'value' => $Key->getValue(),
@@ -25,7 +25,7 @@ class KeyModel
 
     public function enumerate($userId)
     {
-        $sql = 'SELECT * FROM keys WHERE user_id = :user_id';
+        $sql = 'SELECT * FROM sshkeys WHERE user_id = :user_id';
         $stmt = $this->app['db']->prepare($sql);
         $stmt->bindValue('user_id', $userId);
         $stmt->execute();

@@ -22,7 +22,7 @@ class KeyModelTest extends \PHPUnit_Framework_TestCase
         $dbMock
             ->shouldReceive('insert')
             ->with(
-                'keys',
+                'sshkeys',
                 array(
                     'title' => 'key_title',
                     'value' => 'key_value',
@@ -65,7 +65,7 @@ class KeyModelTest extends \PHPUnit_Framework_TestCase
         $dbMock = \Mockery::mock();
         $dbMock
             ->shouldReceive('prepare')
-            ->with('SELECT * FROM keys WHERE user_id = :user_id')
+            ->with('SELECT * FROM sshkeys WHERE user_id = :user_id')
             ->once()
             ->andReturn($statementMock);
 

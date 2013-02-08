@@ -17,7 +17,7 @@ class SessionsSubContext extends BehatContext
         $usersContext = $this->getMainContext()->getSubcontext('users');
         $Request = new \HttpWrapper\Request();
         $Request->post(
-            'http://localhost:8000/v1/users?scenario=' . urlencode($this->getMainContext()->scenario_title),
+            $this->getMainContext()->url . '/v1/users?scenario=' . urlencode($this->getMainContext()->scenario_title),
             array(),
             '{
             "username":"' . $usersContext->userName . '",
@@ -35,7 +35,7 @@ class SessionsSubContext extends BehatContext
         $usersContext = $this->getMainContext()->getSubcontext('users');
         $Request = new \HttpWrapper\Request();
         $this->getMainContext()->response = $Request->post(
-            'http://localhost:8000/v1/sessions?scenario=' . urlencode($this->getMainContext()->scenario_title),
+            $this->getMainContext()->url . '/v1/sessions?scenario=' . urlencode($this->getMainContext()->scenario_title),
             array(),
             '{
             "username":"' . $identifier . '",
@@ -52,7 +52,7 @@ class SessionsSubContext extends BehatContext
         $usersContext = $this->getMainContext()->getSubcontext('users');
         $Request = new \HttpWrapper\Request();
         $this->getMainContext()->response = $Request->post(
-            'http://localhost:8000/v1/sessions?scenario=' . urlencode($this->getMainContext()->scenario_title),
+            $this->getMainContext()->url . '/v1/sessions?scenario=' . urlencode($this->getMainContext()->scenario_title),
             array(),
             '{
             "username":"' . $usersContext->userName . '",
@@ -68,7 +68,7 @@ class SessionsSubContext extends BehatContext
     {
         $Request = new \HttpWrapper\Request();
         $this->getMainContext()->response = $Request->delete(
-            'http://localhost:8000/v1/sessions/current?scenario=' . urlencode($this->getMainContext()->scenario_title),
+            $this->getMainContext()->url . '/v1/sessions/current?scenario=' . urlencode($this->getMainContext()->scenario_title),
             array('Cookie: SESSION=' . $this->getMainContext()->session)
         );
     }

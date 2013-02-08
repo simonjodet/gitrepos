@@ -15,6 +15,7 @@ require_once 'PHPUnit/Framework/Assert/Functions.php';
  */
 class FeatureContext extends BehatContext
 {
+    public $url = 'http://192.168.242.2';
     public $scenario_title;
     /**
      * @var \HttpWrapper\Response $response
@@ -49,7 +50,7 @@ class FeatureContext extends BehatContext
     {
         $Request = new \HttpWrapper\Request();
         $response = $Request->post(
-            'http://localhost:8000/v1/sessions?scenario=' . urlencode($this->scenario_title),
+            $this->getMainContext()->url . '/v1/sessions?scenario=' . urlencode($this->scenario_title),
             array(),
             '{
             "username":"' . $username . '",

@@ -18,8 +18,12 @@ group(
                     new Silex\Provider\DoctrineServiceProvider(),
                     array(
                         'db.options' => array(
-                            'driver' => $app['conf']['db.driver'],
-                            'path' => $app['conf']['db.path']
+                            'driver'    => $app['conf']['db.driver'],
+                            'host'      => $app['conf']['db.host'],
+                            'dbname'    => $app['conf']['db.dbname'],
+                            'user'      => $app['conf']['db.user'],
+                            'password'  => $app['conf']['db.password'],
+                            'charset'   => $app['conf']['db.charset']
                         )
                     )
                 );

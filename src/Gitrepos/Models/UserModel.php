@@ -32,7 +32,7 @@ class UserModel
             );
         } catch (\Exception $e) {
             if ($e->getCode() == '23000' && preg_match(
-                '%column (?P<constraint>.+) is not unique%',
+                '%Integrity constraint violation: 1062 Duplicate entry \'.*\' for key \'unique_users_(?P<constraint>.+)\'%',
                 $e->getMessage(),
                 $matches
             )

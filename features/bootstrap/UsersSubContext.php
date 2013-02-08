@@ -80,7 +80,7 @@ class UsersSubContext extends BehatContext
     {
         $Request = new \HttpWrapper\Request();
         $this->getMainContext()->response = $Request->post(
-            'http://localhost:8000' . $url . '?scenario=' . urlencode($this->getMainContext()->scenario_title),
+            $this->getMainContext()->url . '' . $url . '?scenario=' . urlencode($this->getMainContext()->scenario_title),
             array(),
             '{
 	        "username":"' . $this->userName . '",
@@ -97,7 +97,7 @@ class UsersSubContext extends BehatContext
     {
         $Request = new \HttpWrapper\Request();
         $this->getMainContext()->response = $Request->post(
-            'http://localhost:8000' . $url . '?scenario=' . urlencode($this->getMainContext()->scenario_title),
+            $this->getMainContext()->url . '' . $url . '?scenario=' . urlencode($this->getMainContext()->scenario_title),
             array(),
             '{
 	        "username":"' . $this->userName . '",

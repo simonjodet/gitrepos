@@ -77,7 +77,7 @@ $app->post(
             session_start();
             $_SESSION['username'] = $User->getUsername();
 
-            $response = $app->json('', 230);
+            $response = $app->json('', 200);
             $response->setContent('{"session":"' . session_id() . '"}');
         } else {
             $error_body =

@@ -80,10 +80,11 @@ Feature: users_post
     """
 
   Scenario: Check for duplicate email
-    Given that I want to create a new "simonjodet2" user
+    Given that I want to create a new "simonjodet3" user
     And his password is "azeaze"
     And his email is "nobody2@example.com"
     When I request the URL "/v1/users" with the POST method
+    And that I want to create a new "simonjodet4" user
     And his email is "nobody2@example.com"
     And I request the URL "/v1/users" with the POST method again
     Then the response code should be "409"

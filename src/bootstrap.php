@@ -29,7 +29,11 @@ $app->register(
     array(
         'db.options' => array(
             'driver' => $app['conf']['db.driver'],
-            'path' => $app['conf']['db.path']
+            'host' => $app['conf']['db.host'],
+            'dbname' => $app['conf']['db.dbname'],
+            'user' => $app['conf']['db.user'],
+            'password' => $app['conf']['db.password'],
+            'charset' => $app['conf']['db.charset']
         )
     )
 );
@@ -53,5 +57,25 @@ $app->error(
         ) . ':' . PHP_EOL . $e->getTraceAsString();
     }
 );
+
+if ($app['debug']) {
+    $logger = new \Doctrine\DBAL\Logging\DebugStack();
+    /**
+     * @var $db \Doctrine\DBAL\Connection
+     */
+    $db = $app['db'];
+    $db->getConfiguration()->setSQLLogger($logger);
+    $app->finish(
+        function () use ($app, $db) {
+            $logger = $db->getConfiguration()->getSQLLogger();
+            foreach ($logger->queries as $query) {
+                $app['monolog']->addDebug(
+                    $query['sql'],
+                    array('params' => $query['params'], 'types' => $query['types'])
+                );
+            }
+        }
+    );
+}
 
 return require __DIR__ . '/routes.php';

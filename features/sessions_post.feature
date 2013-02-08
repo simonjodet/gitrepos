@@ -9,7 +9,7 @@ Feature: sessions_post
     And his email is "nobody@example.com"
     When I create the account
     And I want to login with "simonjodet" as identifier
-    Then the response code should be "230"
+    Then the response code should be "200"
     And the headers  should match the following regexp:
     """
 /.*Set-Cookie: SESSION=\w*; path=\/.*/

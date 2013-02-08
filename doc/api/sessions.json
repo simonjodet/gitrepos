@@ -11,7 +11,7 @@
             "password": "string:6:128"
         },
         "success_response": {
-            "code": "230 Authentication Successful",
+            "code": "200 OK",
             "headers": [
                 "Set-Cookie: SESSION=session token(string); path=/"
             ],

@@ -5,19 +5,13 @@
         "app.debug": true,
         "form.secret": "lk<qsfdq<s4d2q4sddf5y4(§4uè43(5§4(§35(4",
         "translation.locale_fallback": "en",
-        "db.driver": "pdo_sqlite",
-        "db.path": "db/gitrepos.sqlite",
+        "db.driver": "pdo_mysql",
+        "db.host": "192.168.242.2",
+        "db.dbname": "gitrepos",
+        "db.user":"gitrepos",
+        "db.password":"gitrepos",
+        "db.charset":"utf8",
         "monolog.logfile": "/tmp/gitrepos.log",
-        "monolog.level": "DEBUG"
-    },
-    "test_cases": {
-        "timezone": "UTC",
-        "app.debug": true,
-        "form.secret": "lk<qsfdq<s4d2q4sddf5y4(§4uè43(5§4(§35(4",
-        "translation.locale_fallback": "en",
-        "db.driver": "pdo_sqlite",
-        "db.path": "/tmp/gitrepos_tests.db",
-        "monolog.logfile": "/tmp/gitrepos_tests.log",
         "monolog.level": "DEBUG"
     }
 }

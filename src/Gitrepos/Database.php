@@ -44,16 +44,16 @@ class Database
                 $systemTable->addUniqueIndex(array('system_key'), 'unique_system_key');
 
                 $usersTable = $Schema->createTable('users');
-                $usersTable->addColumn('id', 'integer', array('unsigned' => true));
+                $usersTable->addColumn('id', 'integer', array('unsigned' => true, 'autoincrement' => true));
                 $usersTable->addColumn('username', 'string', array('length' => 64));
                 $usersTable->addColumn('email', 'string', array('length' => 255));
                 $usersTable->addColumn('password', 'string', array('length' => 255));
-                $usersTable->addUniqueIndex(array('username'), 'unique_users_nickname');
+                $usersTable->addUniqueIndex(array('username'), 'unique_users_username');
                 $usersTable->addUniqueIndex(array('email'), 'unique_users_email');
                 $usersTable->setPrimaryKey(array('id'));
 
-                $keysTable = $Schema->createTable('keys');
-                $keysTable->addColumn('id', 'integer', array('unsigned' => true));
+                $keysTable = $Schema->createTable('sshkeys');
+                $keysTable->addColumn('id', 'integer', array('unsigned' => true, 'autoincrement' => true));
                 $keysTable->addColumn('user_id', 'integer', array('unsigned' => true));
                 $keysTable->addColumn('title', 'string', array('length' => 128));
                 $keysTable->addColumn('value', 'string', array('length' => 512));
@@ -107,7 +107,7 @@ class Database
 
     public function dropTable($table)
     {
-        $this->conn->query("DROP TABLE IF EXISTS '" . $table . "';");
+        $this->conn->query("DROP TABLE IF EXISTS " . $table . ";");
     }
 
     public function reset($version = null)

@@ -116,7 +116,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
         $ConnectionMock = \Mockery::mock('\Doctrine\DBAL\Connection');
         $ConnectionMock
             ->shouldReceive('query')
-            ->with("DROP TABLE IF EXISTS 'my_table';")
+            ->with("DROP TABLE IF EXISTS my_table;")
             ->once();
         $app['db'] = $ConnectionMock;
 

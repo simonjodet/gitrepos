@@ -114,6 +114,14 @@
                     "error": "Requires authentication",
                     "doc": "/docs/keys.json"
                 }
+            },
+            {
+                "code": "401 Unauthorized",
+                "body": {
+                    "code": 401,
+                    "error": "You don't own this key",
+                    "doc": "/docs/keys.json"
+                }
             }
         ],
         "sample_call": "TODO"
